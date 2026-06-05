@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les Zérissons - Géocaching CC Région de Rambervillers</title>
+    <!-- Importation des polices de la charte graphique (memo_chartre_graphique.jpg) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Importation de Leaflet pour la carte GPS (Gratuit & Open Source) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        :root {
+            --vert-principal: #90A265;   /* Vert de la charte */
+            --fonce-texte: #666A5F;      /* Foncé de la charte */
+            --fonce-titre: #6D6E71;      /* Deuxième foncé */
+            --gris-fond: #E6E7E8;        /* Fond clair de la charte */
+            --blanc: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--gris-fond);
+            color: var(--fonce-texte);
+            padding-bottom: 30px;
+        }
+
+        h1, h2, h3, .font-charte {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        header {
+            background-color: var(--blanc);
+            text-align: center;
+            padding: 20px;
+            border-bottom: 3px solid var(--vert-principal);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        header h1 {
+            color: var(--vert-principal);
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 0.9rem;
+            color: var(--fonce-titre);
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        /* ÉCRANS */
+        .screen {
+            display: none;
+            background: var(--blanc);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .card-parcours {
+            background-color: var(--blanc);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--vert-principal);
+            cursor: pointer;
+        }
+
+        .badge-herisson {
+            display: inline-block;
+            background-color: var(--gris-fond);
+            color: var(--fonce-texte);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .infos-cles {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            text-align: center;
+            font-size: 0.85rem;
+            background-color: #f8f9f9;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .infos-cles span {
+            display: block;
+            font-weight: bold;
+            color: var(--vert-principal);
+        }
+
+        .btn-retour {
+            background: none;
+            border: none;
+            color: var(--fonce-titre);
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .intro-texte {
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .btn-principal {
+            display: block;
+            width: 100%;
+            background-color: var(--vert-principal);
+            color: var(--blanc);
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(144, 162, 101, 0.3);
+        }
+
+        .btn-principal:disabled {
+            background-color: #ccc;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        /* SECTION COMMENTAIRES */
+        .section-commentaires {
+            margin-top: 25px;
+            border-top: 2px dashed var(--gris-fond);
+            padding-top: 15px;
+        }
+
+        .section-commentaires h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--fonce-titre);
+        }
+
+        .liste-commentaires {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .comm-item {
+            background-color: #f8f9f9;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+        }
+
+        .comm-auteur {
+            font-weight: bold;
+            color: var(--vert-principal);
+        }
+
+        textarea {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            resize: none;
+            font-family: inherit;
+            margin-top: 5px;
+        }
+
+        /* LA CARTE GPS */
+        #map-container {
+            width: 100%;
+            height: 350px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 2px solid var(--gris-fond);
+            z-index: 1;
+        }
+
+        .step-header {
+            color: var(--vert-principal);
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--gris-fond);
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+            margin-top: 10px;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--vert-principal);
+        }
+
+        .error-msg {
+            color: #c0392b;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>LES ZÉRISSONS</h1>
+        <p>Communauté de Communes de la Région de Rambervillers</p>
+    </header>
+
+    <div class="container">
+
+        <!-- ================= ÉCRAN 1 : ACCUEIL ================= -->
+        <div id="screen-accueil" class="screen active">
+            <div class="card-parcours" onclick="ouvrirDetail(1)">
+                <h2>Rambervillers, raconte-nous ton histoire !</h2>
+                <div class="badge-herisson">🦔 L'Héri'storien (Histoire & Patrimoine)</div>
+                <div class="infos-cles">
+                    <div>Lieu<span>Rambervillers</span></div>
+                    <div>Distance<span>1.5 km</span></div>
+                    <div>Durée<span>1h00</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ÉCRAN 2 : DÉTAIL PARCOURS ================= -->
+        <div id="screen-detail" class="screen">
+            <button class="btn-retour" onclick="changerEcran('screen-accueil')">← Retour</button>
+            <h2 id="detail-titre"></h2>
+            <div id="detail-badge" class="badge-herisson"></div>
+            
+            <div class="infos-cles" style="margin-bottom: 20px;">
+                <div>Lieu<span id="detail-lieu"></span></div>
+                <div>Distance<span id="detail-distance"></span></div>
+                <div>Durée<span id="detail-duree"></span></div>
+            </div>
+
+            <p class="intro-texte">
+                <strong>Introduction :</strong><br>
+                Muni de vos bonnes chaussures, partez avec <strong>l'Héri'storien</strong> à la découverte des secrets du centre historique de Rambervillers. Observez bien les monuments à chaque étape. Activez votre GPS, rejoignez les cibles sur la carte et débloquez les énigmes !
+            </p>
+
+            <!-- Historique des commentaires visible à l'accueil du parcours -->
+            <div class="section-commentaires">
+                <h3>💬 Avis des Z'aventuriers</h3>
+                <div class="liste-commentaires">
+                    <div class="comm-item"><span class="comm-auteur">Famille Vosges88 :</span> Superbe balade ! Les enfants ont adoré chercher les indices sur les tours. Le badge en bois est magnifique.</div>
+                    <div class="comm-item"><span class="comm-auteur">Lucas_Grim :</span> Très sympa à faire un dimanche après-midi. L'Héri'storien nous apprend plein de choses sur l'ancien château !</div>
+                </div>
+            </div>
+
+            <button class="btn-principal" onclick="demarrerJeu()">DÉMARRER LE PARCOURS</button>
+        </div>
+
+        <!-- ================= ÉCRAN 3 : CARTE DE NAVIGATION GPS ================= -->
+        <div id="screen-carte" class="screen">
+            <button class="btn-retour" onclick="abandonnerJeu()">✕ Quitter le parcours</button>
+            <div class="step-header" id="carte-etape-nom">Direction : Étape 1</div>
+            <p style="font-size: 0.9rem;">Suivez la carte pour vous rendre au point de rendez-vous. Votre position s'affiche en direct.</p>
+            
+            <!-- Emplacement de la carte Leaflet -->
+            <div id="map-container"></div>
+
+            <button class="btn-principal" onclick="ouvrirEnigme()">J'Y SUIS !</button>
+        </div>
+
+        <!-- ================= ÉCRAN 4 : ÉNIGME DU LIEU ================= -->
+        <div id="screen-enigme" class="screen">
+            <div class="step-header" id="jeu-etape-nom">Énigme</div>
+            <p class="intro-texte" id="jeu-enigme-texte"></p>
+
+            <div class="zone-reponse">
+                <label style="font-weight: bold;">Votre réponse :</label>
+                <input type="text" id="input-reponse" placeholder="Tapez la réponse ici..." autocomplete="off">
+                <div id="error-msg" class="error-msg">Mauvaise réponse, ouvrez l'œil et réessayez !</div>
+                <button class="btn-principal" onclick="validerEtape()">VALIDER L'ÉNIGME</button>
+            </div>
+        </div>
+
+        <!-- ================= ÉCRAN 5 : FIN & COMMENTAIRE OBLIGATOIRE ================= -->
+        <div id="screen-fin" class="screen">
+            <h2 style="color: var(--vert-principal); text-align: center; margin-bottom: 15px;">🎉 TOUTES LES ÉTAPES VALIDÉES ! 🎉</h2>
+            <p class="intro-texte">
+                Tu as résolu toutes les énigmes ! Pour obtenir les coordonnées GPS secrètes de la cache finale et collectionner ton badge physique, laisse ton commentaire obligatoire ci-dessous :
+            </p>
+            
+            <div class="section-commentaires" style="border-top: none; padding-top: 0;">
+                <textarea id="comm-final" placeholder="Donnez votre avis sur le parcours... (5 caractères min.)" oninput="verifierCommentaireFinal()"></textarea>
+            </div>
+
+            <button id="btn-debloquer-cache" class="btn-principal" disabled onclick="afficherCacheFinale()">DÉBLOQUER LA CACHE FINALE</button>
+            
+            <!-- Zone cachée révélée après le commentaire -->
+            <div id="zone-cache-revelee" style="display:none; background: #f1f9f1; padding: 15px; border-radius: 8px; border: 2px solid var(--vert-principal); margin-top: 20px; text-align: center;">
+                <p style="font-weight: bold; margin-bottom: 5px; color: #27ae60;">📍 Coordonnées de la cache physique :</p>
+                <span class="coordonnees" style="font-family: monospace; font-size: 1.2rem; font-weight: bold; background: #fff; padding: 5px 10px; border-radius: 4px; display: inline-block;">48°20'41.0"N &nbsp; 6°38'25.9"E</span>
+                <p style="font-size: 0.85rem; margin-top: 10px;">Rendez-vous à la <strong>Chapelle Saint Antoine</strong> pour ouvrir la boîte et récupérer ton précieux badge de l'Héri'storien !</p>
+                <button class="btn-principal" style="background-color: var(--fonce-titre);" onclick="changerEcran('screen-accueil')">RETOUR À L'ACCUEIL</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Coordonnées réelles du parcours fournies par l'utilisateur
+        const dbParcours = {
+            1: {
+                titre: "Rambervillers, raconte-nous ton histoire !",
+                herisson: "🦔 L'Héri'storien (Histoire & Patrimoine)",
+                lieu: "Rambervillers",
+                distance: "1.5 km",
+                duree: "1h00",
+                etapes: [
+                    { nom: "Départ : Hôtel de ville", lat: 48.346444, lng: 6.635333, texte: "Bienvenue ! Pour lancer le parcours, observez la façade de l'Hôtel de ville. Combien de grandes fenêtres arquées voyez-vous au rez-de-chaussée ? (Écrivez le chiffre en lettres, ex: 'trois')", solution: "trois" },
+                    { nom: "Étape 1 : Église Sainte Libaire", lat: 48.346000, lng: 6.635389, texte: "Devant l'église. Quelle est la couleur principale de la grande porte d'entrée en bois ? (ex: rouge, marron, vert...)", solution: "marron" },
+                    { nom: "Étape 2 : Ancien château", lat: 48.346778, lng: 6.633861, texte: "Face aux vestiges. Quel est le matériau principal utilisé pour l'imposante tour d'angle restante ? (ex: brique, gres, calcaire)", solution: "gres" },
+                    { nom: "Étape 3 : Tour Haton", lat: 48.346250, lng: 6.633917, texte: "Cette tour faisait partie des anciens remparts. Quel métier historique lié aux tissus s'exerçait beaucoup ici ? (Indice : les 'drapiers' ou les 'tanneurs' ?)", solution: "drapiers" },
+                    { nom: "Étape 4 : Ancien couvent", lat: 48.345583, lng: 6.633556, texte: "Regardez la plaque historique. En quelle année ce couvent a-t-il été fondé ? (Entrez l'année à 4 chiffres)", solution: "1624" },
+                    { nom: "Étape 5 : Tour d’Anglemein", lat: 48.345722, lng: 6.637389, texte: "Une autre magnifique fortification ! Combien de meurtrières verticales comptez-vous sur sa face visible depuis la rue ? (Entrez un chiffre)", solution: "2" },
+                    { nom: "Étape 6 : Pont des Laboureurs", lat: 48.346000, lng: 6.638861, texte: "Dernière étape ! Quelle rivière s'écoule paisiblement sous vos pieds ici ?", solution: "la mortagne" }
+                ]
+            }
+        };
+
+        let parcoursActuelId = null;
+        let etapeActuelleIndex = 0;
+        let map = null;
+        let userMarker = null;
+        let targetMarker = null;
+        let watchId = null;
+
+        function changerEcran(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function ouvrirDetail(id) {
+            parcoursActuelId = id;
+            const p = dbParcours[id];
+            document.getElementById('detail-titre').innerText = p.titre;
+            document.getElementById('detail-badge').innerText = p.herisson;
+            document.getElementById('detail-lieu').innerText = p.lieu;
+            document.getElementById('detail-distance').innerText = p.distance;
+            document.getElementById('detail-duree').innerText = p.duree;
+            changerEcran('screen-detail');
+        }
+
+        function demarrerJeu() {
+            etapeActuelleIndex = 0;
+            changerEcran('screen-carte');
+            initMap();
+        }
+
+        // Initialisation de la carte Leaflet
+        function initMap() {
+            const p = dbParcours[parcoursActuelId];
+            const etape = p.etapes[etapeActuelleIndex];
+
+            document.getElementById('carte-etape-nom').innerText = "Cible : " + etape.nom;
+
+            // Création de la carte si elle n'existe pas
+            if (!map) {
+                map = L.map('map-container').setView([etape.lat, etape.lng], 16);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(map);
+            } else {
+                map.setView([etape.lat, etape.lng], 16);
+            }
+
+            // Marqueur de la cible à atteindre (Rouge)
+            if (targetMarker) { map.removeLayer(targetMarker); }
+            targetMarker = L.marker([etape.lat, etape.lng]).addTo(map)
+                .bindPopup("<b>" + etape.nom + "</b><br>Rendez-vous ici !").openPopup();
+
+            // Activation du tracking GPS en temps réel
+            if (navigator.geolocation) {
+                if (watchId) navigator.geolocation.clearWatch(watchId);
+                
+                watchId = navigator.geolocation.watchPosition(function(position) {
+                    const uLat = position.coords.latitude;
+                    const uLng = position.coords.longitude;
+
+                    // Icône bleue personnalisée pour le joueur
+                    const blueIcon = L.icon({
+                        iconUrl: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+                        iconSize: [32, 32],
+                        iconAnchor: [16, 32]
+                    });
+
+                    if (userMarker) {
+                        userMarker.setLatLng([uLat, uLng]);
+                    } else {
+                        userMarker = L.marker([uLat, uLng], {icon: blueIcon}).addTo(map).bindPopup("Vous êtes ici");
+                    }
+                }, function(err) {
+                    console.log("Erreur GPS ou refus d'autorisation.");
+                }, { enableHighAccuracy: true });
+            } else {
+                alert("La géolocalisation n'est pas supportée par votre téléphone.");
+            }
+            
+            // Forcer le rafraîchissement de l'affichage Leaflet
+            setTimeout(() => { map.invalidateSize(); }, 200);
+        }
+
+        function ouvrirEnigme() {
+            const p = dbParcours[parcoursActuelId];
+            const etape = p.etapes[etapeActuelleIndex];
+            
+            changerEcran('screen-enigme');
+            document.getElementById('jeu-etape-nom').innerText = etape.nom;
+            document.getElementById('jeu-enigme-texte').innerText = etape.texte;
+            document.getElementById('input-reponse').value = "";
+            document.getElementById('error-msg').style.display = "none";
+        }
+
+        function validerEtape() {
+            const p = dbParcours[parcoursActuelId];
+            const etape = p.etapes[etapeActuelleIndex];
+            const reponseJoueur = document.getElementById('input-reponse').value.trim().toLowerCase();
+
+            const reponseClean = reponseJoueur.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            const solutionClean = etape.solution.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+            if (reponseClean === solutionClean) {
+                etapeActuelleIndex++;
+                if (etapeActuelleIndex < p.etapes.length) {
+                    alert("Bravo ! Étape validée. En route pour la prochaine étape !");
+                    changerEcran('screen-carte');
+                    initMap();
+                } else {
+                    // Écran final (Avis obligatoire)
+                    if (watchId) navigator.geolocation.clearWatch(watchId);
+                    document.getElementById('comm-final').value = "";
+                    document.getElementById('btn-debloquer-cache').disabled = true;
+                    document.getElementById('zone-cache-revelee').style.display = "none";
+                    changerEcran('screen-fin');
+                }
+            } else {
+                document.getElementById('error-msg').style.display = "block";
+            }
+        }
+
+        function verifierCommentaireFinal() {
+            const texte = document.getElementById('comm-final').value.trim();
+            document.getElementById('btn-debloquer-cache').disabled = (texte.length < 5);
+        }
+
+        function afficherCacheFinale() {
+            document.getElementById('comm-final').disabled = true;
+            document.getElementById('btn-debloquer-cache').style.display = "none";
+            document.getElementById('zone-cache-revelee').style.display = "block";
+        }
+
+        function abandonnerJeu() {
+            if (confirm("Voulez-vous quitter le jeu ?")) {
+                if (watchId) navigator.geolocation.clearWatch(watchId);
+                changerEcran('screen-accueil');
+            }
+        }
+    </script>
+</body>
+</html>
