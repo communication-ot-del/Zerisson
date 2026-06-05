@@ -4,246 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Les Zérissons - Géocaching CC Région de Rambervillers</title>
-    <!-- Importation des polices de la charte graphique (memo_chartre_graphique.jpg) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     
-    <!-- Importation de Leaflet pour la carte GPS (Gratuit & Open Source) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <style>
         :root {
-            --vert-principal: #90A265;   /* Vert de la charte */
-            --fonce-texte: #666A5F;      /* Foncé de la charte */
-            --fonce-titre: #6D6E71;      /* Deuxième foncé */
-            --gris-fond: #E6E7E8;        /* Fond clair de la charte */
+            --vert-principal: #90A265;
+            --fonce-texte: #666A5F;
+            --fonce-titre: #6D6E71;
+            --gris-fond: #E6E7E8;
             --blanc: #FFFFFF;
+            --rouge-erreur: #c0392b;
+            --vert-succes: #27ae60;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--gris-fond); color: var(--fonce-texte); padding-bottom: 30px; }
+        h1, h2, h3 { font-family: 'Yanone Kaffeesatz', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--gris-fond);
-            color: var(--fonce-texte);
-            padding-bottom: 30px;
-        }
+        header { background-color: var(--blanc); padding: 15px 20px; border-bottom: 3px solid var(--vert-principal); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .header-container { max-width: 600px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .logo-app { width: 65px; height: auto; border-radius: 50%; }
+        .header-text { text-align: left; }
+        header h1 { color: var(--vert-principal); font-size: 2.2rem; font-weight: 700; line-height: 1.1; }
+        .baseline { font-size: 0.95rem; color: var(--fonce-titre); font-weight: bold; font-style: italic; margin-bottom: 2px; }
+        .sub-baseline { font-size: 0.75rem; color: #888; }
 
-        h1, h2, h3, .font-charte {
-            font-family: 'Yanone Kaffeesatz', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+        .container { max-width: 600px; margin: 20px auto; padding: 0 15px; }
+        .screen { display: none; background: var(--blanc); border-radius: 12px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .screen.active { display: block; }
 
-        header {
-            background-color: var(--blanc);
-            text-align: center;
-            padding: 20px;
-            border-bottom: 3px solid var(--vert-principal);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
+        .dialogue-wrapper { display: flex; gap: 12px; margin-bottom: 20px; align-items: flex-start; }
+        .avatar-herisson { width: 70px; height: 70px; object-fit: contain; background: transparent; flex-shrink: 0; }
+        .bulle-dialogue { background-color: #f1f2f6; border-radius: 12px; padding: 12px 15px; font-size: 0.9rem; line-height: 1.5; position: relative; width: 100%; border: 1px solid #e4e7eb; }
 
-        header h1 {
-            color: var(--vert-principal);
-            font-size: 2.5rem;
-            font-weight: 700;
-        }
+        .card-parcours { background-color: var(--blanc); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid var(--vert-principal); cursor: pointer; }
+        .badge-herisson { display: inline-block; background-color: var(--gris-fond); color: var(--fonce-texte); padding: 4px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-bottom: 15px; }
+        
+        .infos-cles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; font-size: 0.85rem; background-color: #f8f9f9; padding: 10px; border-radius: 8px; }
+        .infos-cles span { display: block; font-weight: bold; color: var(--vert-principal); }
+        
+        .btn-retour { background: none; border: none; color: var(--fonce-titre); font-weight: bold; cursor: pointer; margin-bottom: 15px; display: flex; align-items: center; gap: 5px; }
+        .intro-texte { margin: 15px 0; line-height: 1.6; }
+        
+        .btn-principal { display: block; width: 100%; background-color: var(--vert-principal); color: var(--blanc); border: none; padding: 15px; border-radius: 8px; font-family: 'Yanone Kaffeesatz', sans-serif; font-size: 1.5rem; font-weight: bold; cursor: pointer; text-align: center; margin-top: 20px; box-shadow: 0 4px 6px rgba(144, 162, 101, 0.3); }
+        .btn-principal:disabled { background-color: #ccc; box-shadow: none; cursor: not-allowed; }
 
-        header p {
-            font-size: 0.9rem;
-            color: var(--fonce-titre);
-            font-weight: 600;
-        }
+        #map-container { width: 100%; height: 320px; border-radius: 8px; margin-top: 15px; border: 2px solid var(--gris-fond); z-index: 1; }
+        .step-header { color: var(--vert-principal); font-size: 1.6rem; margin-bottom: 5px; }
+        
+        input[type="text"], input[type="number"] { width: 100%; padding: 12px; border: 2px solid var(--gris-fond); border-radius: 6px; font-size: 1rem; outline: none; margin-top: 10px; }
+        input[type="text"]:focus, input[type="number"]:focus { border-color: var(--vert-principal); }
+        
+        .error-msg { color: var(--rouge-erreur); font-size: 0.85rem; margin-top: 5px; display: none; }
 
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 0 15px;
-        }
+        .coord-box { background: #f8f9f9; padding: 15px; border-radius: 8px; margin: 15px 0; border: 1px solid #e6e7e8; }
+        .coord-line { font-family: monospace; font-size: 1.05rem; font-weight: bold; text-align: center; margin-bottom: 15px; color: var(--fonce-titre); }
+        .recap-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #e6e7e8; font-size: 0.85rem; }
+        .status-badge { padding: 3px 8px; border-radius: 4px; color: white; font-size: 0.75rem; font-weight: bold; }
+        .status-valid { background-color: var(--vert-succes); }
+        .status-wrong { background-color: var(--rouge-erreur); }
+        .btn-modife { background: var(--fonce-titre); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; margin-left: 5px; }
 
-        /* ÉCRANS */
-        .screen {
-            display: none;
-            background: var(--blanc);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-
-        .screen.active {
-            display: block;
-        }
-
-        .card-parcours {
-            background-color: var(--blanc);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border-left: 5px solid var(--vert-principal);
-            cursor: pointer;
-        }
-
-        .badge-herisson {
-            display: inline-block;
-            background-color: var(--gris-fond);
-            color: var(--fonce-texte);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .infos-cles {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            text-align: center;
-            font-size: 0.85rem;
-            background-color: #f8f9f9;
-            padding: 10px;
-            border-radius: 8px;
-        }
-
-        .infos-cles span {
-            display: block;
-            font-weight: bold;
-            color: var(--vert-principal);
-        }
-
-        .btn-retour {
-            background: none;
-            border: none;
-            color: var(--fonce-titre);
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .intro-texte {
-            margin: 15px 0;
-            line-height: 1.6;
-        }
-
-        .btn-principal {
-            display: block;
-            width: 100%;
-            background-color: var(--vert-principal);
-            color: var(--blanc);
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: 'Yanone Kaffeesatz', sans-serif;
-            font-size: 1.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-            margin-top: 20px;
-            box-shadow: 0 4px 6px rgba(144, 162, 101, 0.3);
-        }
-
-        .btn-principal:disabled {
-            background-color: #ccc;
-            box-shadow: none;
-            cursor: not-allowed;
-        }
-
-        /* SECTION COMMENTAIRES */
-        .section-commentaires {
-            margin-top: 25px;
-            border-top: 2px dashed var(--gris-fond);
-            padding-top: 15px;
-        }
-
-        .section-commentaires h3 {
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-            color: var(--fonce-titre);
-        }
-
-        .liste-commentaires {
-            max-height: 200px;
-            overflow-y: auto;
-            margin-bottom: 15px;
-        }
-
-        .comm-item {
-            background-color: #f8f9f9;
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 10px;
-            font-size: 0.85rem;
-        }
-
-        .comm-auteur {
-            font-weight: bold;
-            color: var(--vert-principal);
-        }
-
-        textarea {
-            width: 100%;
-            height: 80px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            resize: none;
-            font-family: inherit;
-            margin-top: 5px;
-        }
-
-        /* LA CARTE GPS */
-        #map-container {
-            width: 100%;
-            height: 350px;
-            border-radius: 8px;
-            margin-top: 15px;
-            border: 2px solid var(--gris-fond);
-            z-index: 1;
-        }
-
-        .step-header {
-            color: var(--vert-principal);
-            font-size: 1.6rem;
-            margin-bottom: 5px;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid var(--gris-fond);
-            border-radius: 6px;
-            font-size: 1rem;
-            outline: none;
-            margin-top: 10px;
-        }
-
-        input[type="text"]:focus {
-            border-color: var(--vert-principal);
-        }
-
-        .error-msg {
-            color: #c0392b;
-            font-size: 0.85rem;
-            margin-top: 5px;
-            display: none;
-        }
+        .section-commentaires { margin-top: 25px; border-top: 2px dashed var(--gris-fond); padding-top: 15px; }
+        .section-commentaires h3 { font-size: 1.4rem; margin-bottom: 10px; color: var(--fonce-titre); }
+        textarea { width: 100%; height: 80px; padding: 10px; border: 1px solid #ccc; border-radius: 6px; resize: none; font-family: inherit; margin-top: 5px; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>LES ZÉRISSONS</h1>
-        <p>Communauté de Communes de la Région de Rambervillers</p>
+        <div class="header-container">
+            <img src="mascotte_herisson.jpg" alt="Mascotte Les Zérissons" class="logo-app" onerror="this.src='https://placehold.co/100?text=🦔'">
+            <div class="header-text">
+                <h1>LES ZÉRISSONS</h1>
+                <div class="baseline">Débusquez les secrets, collectionnez les Zérissons !</div>
+                <div class="sub-baseline">CC de la Région de Rambervillers</div>
+            </div>
+        </div>
     </header>
 
     <div class="container">
@@ -275,72 +117,107 @@
 
             <p class="intro-texte">
                 <strong>Introduction :</strong><br>
-                Muni de vos bonnes chaussures, partez avec <strong>l'Héri'storien</strong> à la découverte des secrets du centre historique de Rambervillers. Observez bien les monuments à chaque étape. Activez votre GPS, rejoignez les cibles sur la carte et débloquez les énigmes !
+                Muni de vos bonnes chaussures, partez avec l'Héri'storien décoder le centre de Rambervillers. À chaque étape, observez bien les monuments pour en extraire un indice numérique indispensable pour débloquer la cache finale !
             </p>
-
-            <!-- Historique des commentaires visible à l'accueil du parcours -->
-            <div class="section-commentaires">
-                <h3>💬 Avis des Z'aventuriers</h3>
-                <div class="liste-commentaires">
-                    <div class="comm-item"><span class="comm-auteur">Famille Vosges88 :</span> Superbe balade ! Les enfants ont adoré chercher les indices sur les tours. Le badge en bois est magnifique.</div>
-                    <div class="comm-item"><span class="comm-auteur">Lucas_Grim :</span> Très sympa à faire un dimanche après-midi. L'Héri'storien nous apprend plein de choses sur l'ancien château !</div>
-                </div>
-            </div>
 
             <button class="btn-principal" onclick="demarrerJeu()">DÉMARRER LE PARCOURS</button>
         </div>
 
         <!-- ================= ÉCRAN 3 : CARTE DE NAVIGATION GPS ================= -->
         <div id="screen-carte" class="screen">
-            <button class="btn-retour" onclick="abandonnerJeu()">✕ Quitter le parcours</button>
+            <button class="btn-retour" onclick="abandonnerJeu()">✕ Abandonner</button>
             <div class="step-header" id="carte-etape-nom">Direction : Étape 1</div>
-            <p style="font-size: 0.9rem;">Suivez la carte pour vous rendre au point de rendez-vous. Votre position s'affiche en direct.</p>
+            <p style="font-size: 0.9rem;" id="carte-instruction-texte">Suivez la carte...</p>
             
-            <!-- Emplacement de la carte Leaflet -->
             <div id="map-container"></div>
 
-            <button class="btn-principal" onclick="ouvrirEnigme()">J'Y SUIS !</button>
+            <button id="btn-action-carte" class="btn-principal" onclick="ouvrirEtapeAction()">J'Y SUIS !</button>
         </div>
 
         <!-- ================= ÉCRAN 4 : ÉNIGME DU LIEU ================= -->
         <div id="screen-enigme" class="screen">
             <div class="step-header" id="jeu-etape-nom">Énigme</div>
-            <p class="intro-texte" id="jeu-enigme-texte"></p>
+            
+            <div class="dialogue-wrapper">
+                <img src="herisson_dialogue.png" class="avatar-herisson" alt="Héristorien" onerror="this.src='https://placehold.co/100?text=🦔'">
+                <div class="bulle-dialogue" id="jeu-dialogue-herisson"></div>
+            </div>
+
+            <p class="intro-texte" id="jeu-enigme-texte" style="font-weight: 600; background: #fffdf0; padding: 10px; border-left: 4px solid #f1c40f;"></p>
 
             <div class="zone-reponse">
-                <label style="font-weight: bold;">Votre réponse :</label>
-                <input type="text" id="input-reponse" placeholder="Tapez la réponse ici..." autocomplete="off">
-                <div id="error-msg" class="error-msg">Mauvaise réponse, ouvrez l'œil et réessayez !</div>
-                <button class="btn-principal" onclick="validerEtape()">VALIDER L'ÉNIGME</button>
+                <label style="font-weight: bold;">Entrez le nombre ou chiffre trouvé :</label>
+                <input type="number" id="input-reponse" placeholder="Ex: 12" autocomplete="off">
+                <button class="btn-principal" onclick="enregistrerEtapeReponse()">VALIDER CETTE ÉTAPE</button>
             </div>
         </div>
 
-        <!-- ================= ÉCRAN 5 : FIN & COMMENTAIRE OBLIGATOIRE ================= -->
-        <div id="screen-fin" class="screen">
-            <h2 style="color: var(--vert-principal); text-align: center; margin-bottom: 15px;">🎉 TOUTES LES ÉTAPES VALIDÉES ! 🎉</h2>
-            <p class="intro-texte">
-                Tu as résolu toutes les énigmes ! Pour obtenir les coordonnées GPS secrètes de la cache finale et collectionner ton badge physique, laisse ton commentaire obligatoire ci-dessous :
-            </p>
+        <!-- ================= ÉCRAN 5 : CRYPTAGE ET VÉRIFICATION GLOBALE ================= -->
+        <div id="screen-verification-globale" class="screen">
+            <div class="step-header" style="color: var(--fonce-titre);">🔐 Validation de vos indices</div>
             
-            <div class="section-commentaires" style="border-top: none; padding-top: 0;">
-                <textarea id="comm-final" placeholder="Donnez votre avis sur le parcours... (5 caractères min.)" oninput="verifierCommentaireFinal()"></textarea>
+            <div class="dialogue-wrapper">
+                <img src="herisson_dialogue.png" class="avatar-herisson" alt="Héristorien" onerror="this.src='https://placehold.co/100?text=🦔'">
+                <div class="bulle-dialogue">
+                    « Voyons voir vos indices récoltés... Pour déverrouiller l'accès à ma cache secrète, toutes vos balises doivent passer au vert ! S'il y a du rouge, cliquez sur modifier pour corriger votre indice sur place. »
+                </div>
             </div>
 
-            <button id="btn-debloquer-cache" class="btn-principal" disabled onclick="afficherCacheFinale()">DÉBLOQUER LA CACHE FINALE</button>
+            <div class="coord-box">
+                <div class="coord-line">Coordonnées : N 48° [A][B].[C]0' / E 6° [D][E].[F][G]'</div>
+                <div id="liste-recap-indices"></div>
+            </div>
+
+            <div id="msg-verif-erreur" style="color: var(--rouge-erreur); font-weight: bold; text-align: center; display: none; margin-bottom: 10px; font-size: 0.9rem;">
+                ⚠️ Certaines réponses sont incorrectes. Corrigez-les pour débloquer le chemin !
+            </div>
+
+            <button id="btn-acces-cache" class="btn-principal" onclick="passerALaCacheFinale()">🔓 ACCÉDER À LA CACHE FINALE</button>
+        </div>
+
+        <!-- ================= ÉCRAN 6 : ÉCRAN DE LA CACHE FINALE (SANS QUESTIONS) ================= -->
+        <div id="screen-cache-recherche" class="screen">
+            <div class="step-header" style="color: #e67e22;">📍 La Cache : Chapelle Saint-Antoine</div>
             
-            <!-- Zone cachée révélée après le commentaire -->
-            <div id="zone-cache-revelee" style="display:none; background: #f1f9f1; padding: 15px; border-radius: 8px; border: 2px solid var(--vert-principal); margin-top: 20px; text-align: center;">
-                <p style="font-weight: bold; margin-bottom: 5px; color: #27ae60;">📍 Coordonnées de la cache physique :</p>
-                <span class="coordonnees" style="font-family: monospace; font-size: 1.2rem; font-weight: bold; background: #fff; padding: 5px 10px; border-radius: 4px; display: inline-block;">48°20'41.0"N &nbsp; 6°38'25.9"E</span>
-                <p style="font-size: 0.85rem; margin-top: 10px;">Rendez-vous à la <strong>Chapelle Saint Antoine</strong> pour ouvrir la boîte et récupérer ton précieux badge de l'Héri'storien !</p>
-                <button class="btn-principal" style="background-color: var(--fonce-titre);" onclick="changerEcran('screen-accueil')">RETOUR À L'ACCUEIL</button>
+            <div class="dialogue-wrapper">
+                <img src="herisson_dialogue.png" class="avatar-herisson" alt="Héristorien" onerror="this.src='https://placehold.co/100?text=🦔'">
+                <div class="bulle-dialogue">
+                    « Mille piques, vous avez réussi ! Vos calculs vous ont guidé sans encombre jusqu'à la magnifique Chapelle Saint-Antoine. Érigée au XVe siècle, elle abritait jadis des moines hospitaliers ! Regardez au-dessus de la porte, vous y verrez Saint-Antoine flanqué de sa clochette et de son petit cochon. Mais trêve de bavardages... Ouvrez l'œil, la cache physique se cache tout près ! »
+                </div>
+            </div>
+
+            <p class="intro-texte" style="font-weight: bold; margin-bottom: 15px; color: var(--fonce-titre); text-align: center; background: #fff5eb; padding: 10px; border-radius: 6px;">
+                Fouillez les abords du monument. Une fois la boîte physique découverte, ouvrez-la : elle contient le fameux mot mystère !
+            </p>
+            
+            <button class="btn-principal" style="background-color: #e67e22;" onclick="document.getElementById('zone-mot-mystere').style.display='block'">🔓 J'AI TROUVÉ LA CACHE !</button>
+
+            <div id="zone-mot-mystere" style="display: none; margin-top: 25px; border-top: 2px dashed var(--gris-fond); padding-top: 15px;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Entrez le mot mystère inscrit à l'intérieur de la boîte :</label>
+                <input type="text" id="input-mot-mystere" placeholder="Tapez le mot ici..." autocomplete="off">
+                <div id="error-msg-cache" class="error-msg">Ce n'est pas le bon mot mystère. Vérifiez bien l'étiquette dans la boîte !</div>
+                <button class="btn-principal" onclick="validerMotMystere()">OUVRIR LE COFFRE NUMÉRIQUE</button>
+            </div>
+        </div>
+
+        <!-- ================= ÉCRAN 7 : FIN & LAISSER UN COMMENTAIRE ================= -->
+        <div id="screen-fin" class="screen">
+            <h2 style="color: var(--vert-principal); text-align: center; margin-bottom: 15px;">🎉 PARCOURS COMPLÉTÉ AVEC SUCCÈS ! 🎉</h2>
+            <p class="intro-texte" style="text-align: center;">
+                Félicitations ! Le mot mystère <strong>"laboureur"</strong> est tout à fait exact. Vous validez officiellement votre premier badge virtuel dans l'application et vous pouvez emporter votre récompense physique présente dans la boîte !
+            </p>
+            
+            <div class="section-commentaires">
+                <h3>✍️ Laissez un commentaire pour clore la quête</h3>
+                <p style="font-size: 0.85rem; margin-bottom: 10px; color: var(--fonce-titre);">Partagez vos impressions sur cette chasse aux secrets pour valider définitivement votre parcours :</p>
+                <textarea id="comm-final" placeholder="Donnez votre avis en quelques mots... (5 caractères min.)" oninput="verifierCommentaireFinal()"></textarea>
+                <button id="btn-valider-fin-jeu" class="btn-principal" disabled onclick="cloreParcoursTotalement()">ENREGISTRER MON AVIS & TERMINER</button>
             </div>
         </div>
 
     </div>
 
     <script>
-        // Coordonnées réelles du parcours fournies par l'utilisateur
         const dbParcours = {
             1: {
                 titre: "Rambervillers, raconte-nous ton histoire !",
@@ -348,14 +225,65 @@
                 lieu: "Rambervillers",
                 distance: "1.5 km",
                 duree: "1h00",
+                motMystereOfficiel: "laboureur",
+                cacheCoords: { lat: 48.344722, lng: 6.640528, nom: "Cache : Chapelle Saint Antoine" },
                 etapes: [
-                    { nom: "Départ : Hôtel de ville", lat: 48.346444, lng: 6.635333, texte: "Bienvenue ! Pour lancer le parcours, observez la façade de l'Hôtel de ville. Combien de grandes fenêtres arquées voyez-vous au rez-de-chaussée ? (Écrivez le chiffre en lettres, ex: 'trois')", solution: "trois" },
-                    { nom: "Étape 1 : Église Sainte Libaire", lat: 48.346000, lng: 6.635389, texte: "Devant l'église. Quelle est la couleur principale de la grande porte d'entrée en bois ? (ex: rouge, marron, vert...)", solution: "marron" },
-                    { nom: "Étape 2 : Ancien château", lat: 48.346778, lng: 6.633861, texte: "Face aux vestiges. Quel est le matériau principal utilisé pour l'imposante tour d'angle restante ? (ex: brique, gres, calcaire)", solution: "gres" },
-                    { nom: "Étape 3 : Tour Haton", lat: 48.346250, lng: 6.633917, texte: "Cette tour faisait partie des anciens remparts. Quel métier historique lié aux tissus s'exerçait beaucoup ici ? (Indice : les 'drapiers' ou les 'tanneurs' ?)", solution: "drapiers" },
-                    { nom: "Étape 4 : Ancien couvent", lat: 48.345583, lng: 6.633556, texte: "Regardez la plaque historique. En quelle année ce couvent a-t-il été fondé ? (Entrez l'année à 4 chiffres)", solution: "1624" },
-                    { nom: "Étape 5 : Tour d’Anglemein", lat: 48.345722, lng: 6.637389, texte: "Une autre magnifique fortification ! Combien de meurtrières verticales comptez-vous sur sa face visible depuis la rue ? (Entrez un chiffre)", solution: "2" },
-                    { nom: "Étape 6 : Pont des Laboureurs", lat: 48.346000, lng: 6.638861, texte: "Dernière étape ! Quelle rivière s'écoule paisiblement sous vos pieds ici ?", solution: "la mortagne" }
+                    { 
+                        nom: "Départ : L'Hôtel de Ville", 
+                        lat: 48.346444, lng: 6.635333, 
+                        codeIndex: "A",
+                        dialogue: "Salut les Z'aventuriers ! C'est moi, l'Héri'storien. Rambervillers regorge d'histoires incroyables, et ça commence dès ce magnifique Hôtel de Ville en grès rose achevé en 1581. Regardez ses belles fenêtres à meneaux !",
+                        texte: "Énigme : Sur le côté droit de l'Hôtel de Ville, observez la plaque commémorative qui rend hommage aux victimes civiles du bombardement allemand. Quel jour d'octobre 1944 ce drame s'est-il produit ? Notez ce chiffre pour l'indice [A].", 
+                        solution: "3" 
+                    },
+                    { 
+                        nom: "Étape 1 : L'Église Sainte-Libaire", 
+                        lat: 48.346000, lng: 6.635389, 
+                        codeIndex: "B",
+                        dialogue: "Regardez-moi cette petite cathédrale gothique ! À l'angle de la ruelle attenante, repérez le vieux pilier en pierre qui marquait jadis l'entrée de l'ancien cimetière.",
+                        texte: "Énigme : Ce pilier porte un symbole protecteur gravé en forme de '4' ainsi qu'une date historique : 1592. Calculez la somme de ces 4 chiffres (1+5+9+2). Notez le résultat pour votre indice [B].", 
+                        solution: "17" 
+                    },
+                    { 
+                        nom: "Étape 2 : L'Ancien Château (Tour Carrée)", 
+                        lat: 48.346778, lng: 6.633861, 
+                        codeIndex: "C",
+                        dialogue: "Cette tour carrée est le dernier vestige de la porte d'entrée de l'ancienne forteresse des évêques de Metz, édifiée au XIIe siècle par Étienne de Bar.",
+                        texte: "Énigme : Accolée à la tour se trouve la maison de la famille Vélin. En quelle année Lucie Vélin a-t-elle épousé le vicomte de Bolémont ? Prenez les deux derniers chiffres de cette année (Ex: 1876 -> 76) pour l'indice [C].", 
+                        solution: "76" 
+                    },
+                    { 
+                        nom: "Étape 3 : La Tour Haton", 
+                        lat: 48.346250, lng: 6.633917, 
+                        codeIndex: "D",
+                        dialogue: "Voici l'un des plus précieux vestiges des fortifications de la cité construites au XIIIe siècle ! Un grand chantier de sauvetage a permis de sauvegarder de magnifiques fresques à l'intérieur.",
+                        texte: "Énigme : En quelle année ce grand chantier de restauration moderne de la Tour Haton a-t-il débuté ? Prenez le dernier chiffre de cette année (2003) pour obtenir votre indice [D].", 
+                        solution: "3" 
+                    },
+                    { 
+                        nom: "Étape 4 : L'Ancien Couvent", 
+                        lat: 48.345583, lng: 6.633556, 
+                        codeIndex: "E",
+                        dialogue: "Face à la place Emile Drouël, s'étire la longue façade blanche de l'ancien couvent des Sœurs du Saint-Sacrement. Elles y ont tenu la toute première école gratuite de France pour les filles de familles pauvres !",
+                        texte: "Énigme : Ce couvent historique a été fondé en l'an 1629. Faites l'addition de chacun des chiffres composant cette année de fondation (1+6+2+9). Inscrivez le total pour votre indice [E].", 
+                        solution: "18" 
+                    },
+                    { 
+                        nom: "Étape 5 : La Tour d'Anglemein", 
+                        lat: 48.345722, lng: 6.637389, 
+                        codeIndex: "F",
+                        dialogue: "Levez les yeux pour contempler la majestueuse Tour d'Anglemein qui culmine au-dessus des toitures ! Tout comme la Tour Haton, elle défendait vaillamment la cité médiévale.",
+                        texte: "Énigme : L'enceinte fortifiée de la ville érigée au XIIIe siècle comptait à l'époque un grand nombre de tours de guet. Quel était le nombre total de ces tours de défense ? Entrez ce nombre pour l'indice [F].", 
+                        solution: "24" 
+                    },
+                    { 
+                        nom: "Étape 6 : Le Pont des Laboureurs", 
+                        lat: 48.346000, lng: 6.638861, 
+                        codeIndex: "G",
+                        dialogue: "Vous voilà arrivés sur ce pont aux garde-corps peints en bleu. C'est un lieu mémorable où les habitants ont dressé une fière barricade face aux Prussiens le 9 octobre 1870 !",
+                        texte: "Énigme : Cet acte héroïque a été immortalisé par le peintre Jules-Benoît Lévy dans un tableau monumental intitulé 'La Défense de Rambervillers'. En quelle année cette œuvre d'art a-t-elle été peinte ? Notez ses deux derniers chiffres pour l'indice [G].", 
+                        solution: "96" 
+                    }
                 ]
             }
         };
@@ -366,6 +294,7 @@
         let userMarker = null;
         let targetMarker = null;
         let watchId = null;
+        let reponsesJoueur = {};
 
         function changerEcran(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -386,114 +315,147 @@
 
         function demarrerJeu() {
             etapeActuelleIndex = 0;
+            reponsesJoueur = {};
             changerEcran('screen-carte');
             initMap();
         }
 
-        // Initialisation de la carte Leaflet
         function initMap() {
             const p = dbParcours[parcoursActuelId];
             const etape = p.etapes[etapeActuelleIndex];
-
+            
             document.getElementById('carte-etape-nom').innerText = "Cible : " + etape.nom;
+            document.getElementById('carte-instruction-texte').innerText = "Suivez la carte pour vous positionner sur la balise. Votre position GPS s'actualise en bleu.";
+            document.getElementById('btn-action-carte').innerText = "J'Y SUIS !";
 
-            // Création de la carte si elle n'existe pas
             if (!map) {
                 map = L.map('map-container').setView([etape.lat, etape.lng], 16);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '© OpenStreetMap contributors'
-                }).addTo(map);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors' }).addTo(map);
             } else {
                 map.setView([etape.lat, etape.lng], 16);
             }
 
-            // Marqueur de la cible à atteindre (Rouge)
             if (targetMarker) { map.removeLayer(targetMarker); }
-            targetMarker = L.marker([etape.lat, etape.lng]).addTo(map)
-                .bindPopup("<b>" + etape.nom + "</b><br>Rendez-vous ici !").openPopup();
+            targetMarker = L.marker([etape.lat, etape.lng]).addTo(map).bindPopup("<b>" + etape.nom + "</b>").openPopup();
 
-            // Activation du tracking GPS en temps réel
             if (navigator.geolocation) {
                 if (watchId) navigator.geolocation.clearWatch(watchId);
-                
                 watchId = navigator.geolocation.watchPosition(function(position) {
                     const uLat = position.coords.latitude;
                     const uLng = position.coords.longitude;
-
-                    // Icône bleue personnalisée pour le joueur
                     const blueIcon = L.icon({
                         iconUrl: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
                         iconSize: [32, 32],
                         iconAnchor: [16, 32]
                     });
-
-                    if (userMarker) {
-                        userMarker.setLatLng([uLat, uLng]);
-                    } else {
-                        userMarker = L.marker([uLat, uLng], {icon: blueIcon}).addTo(map).bindPopup("Vous êtes ici");
-                    }
-                }, function(err) {
-                    console.log("Erreur GPS ou refus d'autorisation.");
-                }, { enableHighAccuracy: true });
-            } else {
-                alert("La géolocalisation n'est pas supportée par votre téléphone.");
+                    if (userMarker) { userMarker.setLatLng([uLat, uLng]); } 
+                    else { userMarker = L.marker([uLat, uLng], {icon: blueIcon}).addTo(map); }
+                }, null, { enableHighAccuracy: true });
             }
-            
-            // Forcer le rafraîchissement de l'affichage Leaflet
             setTimeout(() => { map.invalidateSize(); }, 200);
         }
 
-        function ouvrirEnigme() {
+        function ouvrirEtapeAction() {
             const p = dbParcours[parcoursActuelId];
             const etape = p.etapes[etapeActuelleIndex];
             
             changerEcran('screen-enigme');
             document.getElementById('jeu-etape-nom').innerText = etape.nom;
-            document.getElementById('jeu-enigme-texte').innerText = etape.texte;
-            document.getElementById('input-reponse').value = "";
-            document.getElementById('error-msg').style.display = "none";
+            document.getElementById('jeu-dialogue-herisson').innerText = etape.dialogue;
+            document.getElementById('jeu-enigme-texte').innerHTML = etape.texte;
+            
+            document.getElementById('input-reponse').value = reponsesJoueur[etapeActuelleIndex] || "";
         }
 
-        function validerEtape() {
+        function enregistrerEtapeReponse() {
+            const val = document.getElementById('input-reponse').value.trim();
+            if(val === "") { alert("Veuillez inscrire un nombre pour valider votre trouvaille !"); return; }
+            
+            reponsesJoueur[etapeActuelleIndex] = val;
             const p = dbParcours[parcoursActuelId];
-            const etape = p.etapes[etapeActuelleIndex];
-            const reponseJoueur = document.getElementById('input-reponse').value.trim().toLowerCase();
+            etapeActuelleIndex++;
 
-            const reponseClean = reponseJoueur.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-            const solutionClean = etape.solution.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
-            if (reponseClean === solutionClean) {
-                etapeActuelleIndex++;
-                if (etapeActuelleIndex < p.etapes.length) {
-                    alert("Bravo ! Étape validée. En route pour la prochaine étape !");
-                    changerEcran('screen-carte');
-                    initMap();
-                } else {
-                    // Écran final (Avis obligatoire)
-                    if (watchId) navigator.geolocation.clearWatch(watchId);
-                    document.getElementById('comm-final').value = "";
-                    document.getElementById('btn-debloquer-cache').disabled = true;
-                    document.getElementById('zone-cache-revelee').style.display = "none";
-                    changerEcran('screen-fin');
-                }
+            if (etapeActuelleIndex < p.etapes.length) {
+                changerEcran('screen-carte');
+                initMap();
             } else {
-                document.getElementById('error-msg').style.display = "block";
+                genererEcranVerification();
+            }
+        }
+
+        function genererEcranVerification() {
+            const p = dbParcours[parcoursActuelId];
+            const conteneur = document.getElementById('liste-recap-indices');
+            conteneur.innerHTML = "";
+            let toutesLesReponsesJustes = true;
+
+            p.etapes.forEach((etape, idx) => {
+                const repJoueur = reponsesJoueur[idx] || "";
+                const estJuste = (repJoueur === etape.solution);
+                
+                if(!estJuste) { toutesLesReponsesJustes = false; }
+
+                const ligne = document.createElement('div');
+                ligne.className = "recap-item";
+                ligne.innerHTML = `
+                    <div>
+                        <strong>Indice [${etape.codeIndex}]</strong> (${etape.nom}) : 
+                        <span style="font-weight:bold; color:${estJuste ? 'var(--vert-succes)' : 'var(--rouge-erreur)'};">${repJoueur}</span>
+                    </div>
+                    <div>
+                        <span class="status-badge ${estJuste ? 'status-valid' : 'status-wrong'}">${estJuste ? 'JUSTE 🟢' : 'FAUX 🔴'}</span>
+                        <button class="btn-modife" onclick="corrigerEtapeSpecifique(${idx})">Corriger</button>
+                    </div>
+                `;
+                conteneur.appendChild(ligne);
+            });
+
+            if(toutesLesReponsesJustes) {
+                document.getElementById('msg-verif-erreur').style.display = "none";
+                document.getElementById('btn-acces-cache').disabled = false;
+                document.getElementById('btn-acces-cache').style.backgroundColor = "var(--vert-succes)";
+            } else {
+                document.getElementById('msg-verif-erreur').style.display = "block";
+                document.getElementById('btn-acces-cache').disabled = true;
+                document.getElementById('btn-acces-cache').style.backgroundColor = "#ccc";
+            }
+
+            changerEcran('screen-verification-globale');
+        }
+
+        function corrigerEtapeSpecifique(idx) {
+            etapeActuelleIndex = idx;
+            ouvrirEtapeAction();
+        }
+
+        function passerALaCacheFinale() {
+            changerEcran('screen-cache-recherche');
+        }
+
+        function validerMotMystere() {
+            const p = dbParcours[parcoursActuelId];
+            const motSaisi = document.getElementById('input-mot-mystere').value.trim().toLowerCase();
+
+            if (motSaisi === p.motMystereOfficiel.toLowerCase()) {
+                if (watchId) navigator.geolocation.clearWatch(watchId);
+                changerEcran('screen-fin');
+            } else {
+                document.getElementById('error-msg-cache').style.display = "block";
             }
         }
 
         function verifierCommentaireFinal() {
             const texte = document.getElementById('comm-final').value.trim();
-            document.getElementById('btn-debloquer-cache').disabled = (texte.length < 5);
+            document.getElementById('btn-valider-fin-jeu').disabled = (texte.length < 5);
         }
 
-        function afficherCacheFinale() {
-            document.getElementById('comm-final').disabled = true;
-            document.getElementById('btn-debloquer-cache').style.display = "none";
-            document.getElementById('zone-cache-revelee').style.display = "block";
+        function cloreParcoursTotalement() {
+            alert("Parcours validé avec succès ! Votre badge de l'Héri'storien est fièrement acquis. Merci d'avoir joué avec les Zérissons !");
+            changerEcran('screen-accueil');
         }
 
         function abandonnerJeu() {
-            if (confirm("Voulez-vous quitter le jeu ?")) {
+            if (confirm("Voulez-vous abandonner ? Votre progression actuelle sera perdue.")) {
                 if (watchId) navigator.geolocation.clearWatch(watchId);
                 changerEcran('screen-accueil');
             }
