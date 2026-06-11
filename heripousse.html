@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les Zérissons - L'Héri'pousse</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        :root {
+            --vert-principal: #90A265;
+            --fonce-texte: #666A5F;
+            --fonce-titre: #6D6E71;
+            --gris-fond: #E6E7E8;
+            --blanc: #FFFFFF;
+            --rouge-erreur: #c0392b;
+            --vert-succes: #27ae60;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--gris-fond); color: var(--fonce-texte); padding-bottom: 30px; }
+        h1, h2, h3 { font-family: 'Yanone Kaffeesatz', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        header { background-color: var(--blanc); padding: 15px; border-bottom: 3px solid var(--vert-principal); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .header-container { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .mascotte-ronde { width: 90px; height: 90px; object-fit: contain; margin-bottom: 5px; }
+        .app-titre { font-size: 2.2rem; color: var(--vert-principal); font-weight: 700; line-height: 1; }
+        
+        .baseline-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+        .sub-baseline { font-size: 0.85rem; color: var(--fonce-titre); font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+        .logo-ot-mini { height: 28px; width: auto; object-fit: contain; }
+
+        .container { max-width: 600px; margin: 20px auto; padding: 0 15px; }
+        .screen { display: none; background: var(--blanc); border-radius: 12px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .screen.active { display: block; }
+
+        .badge-herisson { display: inline-block; background-color: var(--gris-fond); color: var(--fonce-texte); padding: 4px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-bottom: 12px; }
+        
+        .infos-cles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; font-size: 0.85rem; background-color: #f8f9f9; padding: 10px; border-radius: 8px; }
+        .infos-cles span { display: block; font-weight: bold; color: var(--vert-principal); }
+        
+        .btn-retour { background: none; border: none; color: var(--fonce-titre); font-weight: bold; cursor: pointer; margin-bottom: 15px; display: flex; align-items: center; gap: 5px; font-size: 0.9rem; }
+        .intro-texte { margin: 15px 0; line-height: 1.6; font-size: 0.95rem; }
+        
+        .btn-principal { display: block; width: 100%; background-color: var(--vert-principal); color: var(--blanc); border: none; padding: 15px; border-radius: 8px; font-family: 'Yanone Kaffeesatz', sans-serif; font-size: 1.5rem; font-weight: bold; cursor: pointer; text-align: center; margin-top: 20px; box-shadow: 0 4px 6px rgba(144, 162, 101, 0.3); text-transform: uppercase; }
+        .btn-principal:disabled { background-color: #ccc; box-shadow: none; cursor: not-allowed; }
+
+        #map-container { width: 100%; height: 320px; border-radius: 8px; margin-top: 15px; border: 2px solid var(--gris-fond); z-index: 1; }
+        .step-header { color: var(--vert-principal); font-size: 1.6rem; margin-bottom: 5px; text-transform: uppercase; }
+        
+        input[type="text"], input[type="number"] { width: 100%; padding: 12px; border: 2px solid var(--gris-fond); border-radius: 6px; font-size: 1rem; outline: none; margin-top: 10px; font-family: inherit; }
+        input[type="text"]:focus, input[type="number"]:focus { border-color: var(--vert-principal); }
+        
+        .error-msg { color: var(--rouge-erreur); font-size: 0.85rem; margin-top: 5px; display: none; font-weight: bold; }
+
+        .dialogue-wrapper { display: flex; gap: 12px; margin-bottom: 20px; align-items: flex-start; }
+        .avatar-herisson { width: 70px; height: 70px; object-fit: contain; background: transparent; flex-shrink: 0; }
+        .bulle-dialogue { background-color: #f1f2f6; border-radius: 12px; padding: 12px 15px; font-size: 0.9rem; line-height: 1.5; position: relative; width: 100%; border: 1px solid #e4e7eb; }
+
+        .coord-box { background: #f8f9f9; padding: 15px; border-radius: 8px; margin: 15px 0; border: 1px solid #e6e7e8; }
+        .coord-line { font-family: monospace; font-size: 1.02rem; font-weight: bold; text-align: center; margin-bottom: 15px; color: var(--fonce-titre); }
+        .recap-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #e6e7e8; font-size: 0.85rem; }
+        .status-badge { padding: 3px 8px; border-radius: 4px; color: white; font-size: 0.75rem; font-weight: bold; }
+        .status-valid { background-color: var(--vert-succes); }
+        .status-wrong { background-color: var(--rouge-erreur); }
+        .btn-modife { background: var(--fonce-titre); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; margin-left: 5px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <img src="logo_rond.png" alt="Les Zérissons" class="mascotte-ronde" onerror="this.src='https://placehold.co/100?text=🦔'">
+            <h1 class="app-titre">Les Zérissons</h1>
+            <div class="baseline-container">
+                <div class="sub-baseline">Office de Tourisme de la Région de Rambervillers</div>
+                <img src="Logo OT Région Rambervillers horizontal-01.png" alt="Logo OT" class="logo-ot-mini" onerror="this.style.display='none'">
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <div id="screen-detail" class="screen active">
+            <button class="btn-retour" onclick="window.location.href='index.html'">← Retour à la liste</button>
+            <h2 id="detail-titre"></h2>
+            <div id="detail-badge" class="badge-herisson"></div>
+            
+            <div class="infos-cles" style="margin-bottom: 20px;">
+                <div>Lieu<span id="detail-lieu"></span></div>
+                <div>Distance<span id="detail-distance"></span></div>
+                <div>Durée<span id="detail-duree"></span></div>
+            </div>
+
+            <p class="intro-texte">
+                <strong>Introduction :</strong><br>
+                Bienvenue à Roville-aux-Chênes ! Chaussez vos baskets et partez en compagnie de l'Héri'pousse explorer le riche patrimoine rural et végétal de notre charmant village-rue. Ouvrez l'œil sur l'architecture, l'eau et les arbres centenaires pour récolter les 8 indices chiffrés indispensables à la découverte de notre verger secret !
+            </p>
+
+            <button class="btn-principal" onclick="demarrerJeu()">DÉMARRER LE PARCOURS</button>
+        </div>
+
+        <div id="screen-carte" class="screen">
+            <button class="btn-retour" onclick="abandonnerJeu()">✕ Abandonner</button>
+            <div class="step-header" id="carte-etape-nom">Direction</div>
+            <p style="font-size: 0.9rem;" id="carte-instruction-texte">Suivez la carte...</p>
+            
+            <div id="map-container"></div>
+
+            <button id="btn-action-carte" class="btn-principal" onclick="gererClicActionCarte()">J'Y SUIS !</button>
+        </div>
+
+        <div id="screen-enigme" class="screen">
+            <div class="step-header" id="jeu-etape-nom">Énigme</div>
+            
+            <div class="dialogue-wrapper">
+                <img src="Héri'pousse.png" class="avatar-herisson" alt="Héri'pousse" onerror="this.src='https://placehold.co/100?text=🦔'">
+                <div class="bulle-dialogue" id="jeu-dialogue-herisson"></div>
+            </div>
+
+            <p class="intro-texte" id="jeu-enigme-texte" style="font-weight: 600; background: #fffdf0; padding: 10px; border-left: 4px solid #f1c40f;"></p>
+
+            <div class="zone-reponse">
+                <label style="font-weight: bold;">Entrez le nombre ou chiffre trouvé :</label>
+                <input type="number" id="input-reponse" placeholder="Ex: 12" autocomplete="off">
+                <button class="btn-principal" onclick="enregistrerEtapeReponse()">VALIDER CETTE ÉTAPE</button>
+            </div>
+        </div>
+
+        <div id="screen-verification-globale" class="screen">
+            <div class="step-header" style="color: var(--fonce-titre);">🔐 Validation de vos indices</div>
+            
+            <div class="dialogue-wrapper">
+                <img src="Héri'pousse.png" class="avatar-herisson" alt="Héri'pousse" onerror="this.src='https://placehold.co/100?text=🦔'">
+                <div class="bulle-dialogue">
+                    « Plantations réussies ! Tes indices vont nous dévoiler le chemin de la cache finale. S'il te reste des balises rouges, pas de panique, fais demi-tour et clique sur "Modifier" pour rectifier ta réponse ! »
+                </div>
+            </div>
+
+            <div class="coord-box">
+                <div class="coord-line">Formule : [A][B] + [C][D] - [E] / [F][G] - [H]</div>
+                <div id="liste-recap-indices"></div>
+            </div>
+
+            <div id="msg-verif-erreur" style="color: var(--rouge-erreur); font-weight: bold; text-align: center; display: none; margin-bottom: 10px; font-size: 0.9rem;">
+                ⚠️ Certaines réponses sont incorrectes. Examine bien les indices pour reverdir le panneau !
+            </div>
+
+            <button id="btn-acces-cache" class="btn-principal" onclick="lancerGuidageCacheFinale()">🔓 S'ORIENTER VERS LA CACHE FINALE</button>
+        </div>
+
+        <div id="screen-cache-recherche" class="screen">
+            <div class="step-header" style="color: #e67e22;">📍 La Cache : Le Verger Conservatoire</div>
+            
+            <div class="dialogue-wrapper">
+                <img src="Héri'pousse.png" class="avatar-herisson" alt="Héri'pousse" onerror="this.src='https://placehold.co/100?text=🦔'">
+                <div class="bulle-dialogue">
+                    « Quel magnifique éco-lieu ! Tu as trouvé le chemin du Verger Conservatoire de Roville. C'est ici que l'on protège les variétés de fruits anciennes et locales de notre terroir vosgien. Ma cache verte n'est pas loin, ouvre grand les yeux près des essences arborées... Trouve la boîte et sers-toi de son mot mystère ! »
+                </div>
+            </div>
+
+            <p class="intro-texte" style="font-weight: bold; margin-bottom: 15px; color: var(--fonce-titre); text-align: center; background: #fff5eb; padding: 10px; border-radius: 6px;">
+                Fouillez délicatement la zone du verger. Ouvrez la boîte physique pour y lire le mot mystère final !
+            </p>
+            
+            <button class="btn-principal" style="background-color: #e67e22;" onclick="document.getElementById('zone-mot-mystere').style.display='block'">🔓 J'AI TROUVÉ LA CACHE !</button>
+
+            <div id="zone-mot-mystere" style="display: none; margin-top: 25px; border-top: 2px dashed var(--gris-fond); padding-top: 15px;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Entrez le mot mystère inscrit dans la boîte :</label>
+                <input type="text" id="input-mot-mystere" placeholder="Tapez le mot ici..." autocomplete="off">
+                <div id="error-msg-cache" class="error-msg">Ce n'est pas le bon mot mystère. Vérifie bien l'orthographe dans la boîte.</div>
+                <button class="btn-principal" onclick="validerMotMystere()">OUVRIR LE COFFRE NUMÉRIQUE</button>
+            </div>
+        </div>
+
+        <div id="screen-fin" class="screen">
+            <h2 style="color: var(--vert-principal); text-align: center; margin-bottom: 15px;">🌱 MISSION ACCOMPLIE ! 🌱</h2>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <img src="Héri'pousse.png" style="width: 120px; height: 120px; object-fit: contain;" alt="Félicitations">
+            </div>
+            <p class="intro-texte" style="text-align: center; font-size: 1.1rem; line-height: 1.6;">
+                Fantastique, jeune pousse ! Le mot mystère est correct. Tu as surmonté tous les défis du parcours et décroché ton badge virtuel d'<strong>Héri'pousse</strong> !<br><br>
+                Merci d'avoir exploré Roville-aux-Chênes avec nous et à bientôt pour de nouvelles quêtes !
+            </p>
+            
+            <button class="btn-principal" onclick="window.location.href='index.html'">RETOUR À L'ACCUEIL GÉNÉRAL</button>
+        </div>
+
+    </div>
+
+    <script>
+        const dbParcours = {
+            2: {
+                titre: "Roville, entre nature et patrimoine",
+                herisson: "L'Héri'pousse (Nature & Botanique)",
+                lieu: "Roville-aux-Chênes",
+                distance: "1.8 km",
+                duree: "1h15",
+                motMystereOfficiel: "greffon",
+                cacheCoords: { lat: 48.385944, lng: 6.607444, nom: "Cache finale : Verger conservatoire" },
+                etapes: [
+                    { 
+                        nom: "Départ : Place du Calvaire", 
+                        lat: 48.384444, lng: 6.604500, 
+                        codeIndex: "A",
+                        dialogue: "Bienvenue à tous ! Je suis l'Héri'pousse. Notre voyage commence ici, au cœur historique du village, devant ce calvaire de pierre, symbole des dévotions populaires d'autrefois.",
+                        texte: "Énigme : Observez le monument du calvaire. Combien de personnages sculptés distincts pouvez-vous compter à la base et sur la croix ? Notez ce chiffre pour l'indice [A].", 
+                        solution: "4" 
+                    },
+                    { 
+                        nom: "Étape 1 : Le Vieux Chêne", 
+                        lat: 48.385000, lng: 6.603806, 
+                        codeIndex: "B",
+                        dialogue: "Regardez ce colosse végétal ! Cet arbre remarquable a traversé les générations et symbolise à lui seul le nom de notre village. Quel tronc puissant !",
+                        texte: "Énigme : Approchez-vous de l'arbre et lisez le panneau botanique. Quel est l'âge estimé (en siècles complets) de ce vénérable chêne ? Entrez ce chiffre pour l'indice [B].", 
+                        solution: "3" 
+                    },
+                    { 
+                        nom: "Étape 2 : Le Mur en Pierre Sèche", 
+                        lat: 48.384000, lng: 6.603111, 
+                        codeIndex: "C",
+                        dialogue: "Ce muret n'utilise aucun liant ni ciment ! C'est une technique ancestrale magique qui abrite des dizaines de petits insectes, de lézards et de mousses précieuses.",
+                        texte: "Énigme : Regardez la fiche explicative locale. Combien
