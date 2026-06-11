@@ -225,4 +225,249 @@
                         lat: 48.384000, lng: 6.603111, 
                         codeIndex: "C",
                         dialogue: "Ce muret n'utilise aucun liant ni ciment ! C'est une technique ancestrale magique qui abrite des dizaines de petits insectes, de lézards et de mousses précieuses.",
-                        texte: "Énigme : Regardez la fiche explicative locale. Combien
+                        texte: "Énigme : Regardez la fiche explicative locale. Combien d'espèces de reptiles (lézards, etc.) sont mentionnées comme trouvant refuge dans les anfractuosités de ces pierres ? Notez ce chiffre pour l'indice [C].", 
+                        solution: "2" 
+                    },
+                    { 
+                        nom: "Étape 3 : L'Ancien Moulin et Lavoir", 
+                        lat: 48.383417, lng: 6.600111, 
+                        codeIndex: "D",
+                        dialogue: "Écoutez le doux clapotis de l'eau. La rivière Mortagne faisait tourner la grande roue du moulin et alimentait le lavoir où se réunissaient les lavandières.",
+                        texte: "Énigme : Repérez la date gravée sur le linteau de pierre de l'ancien bâtiment du moulin. Quel est le tout dernier chiffre de cette année de construction ? Notez-le pour l'indice [D].", 
+                        solution: "8" 
+                    },
+                    { 
+                        nom: "Étape 4 : Les Fermes Vosgiennes", 
+                        lat: 48.385000, lng: 6.601583, 
+                        codeIndex: "E",
+                        dialogue: "Admirez l'organisation de ces typiques maisons-blocs lorraines. Le logis, la grange et l'étable cohabitent sous le même toit. Devant, l'usoir servait à stocker le bois et le fumier !",
+                        texte: "Énigme : Observez la grande arche en plein cintre de la porte de grange de la ferme traditionnelle face à vous. Combien de voussoirs (pierres taillées formant l'arc) la composent au total ? Notez ce nombre pour l'indice [E].", 
+                        solution: "15" 
+                    },
+                    { 
+                        nom: "Étape 5 : L'Ancien Couvent", 
+                        lat: 48.385778, lng: 6.602722, 
+                        codeIndex: "F",
+                        dialogue: "De 1922 à 1936, des sœurs bénédictines vivaient cloîtrées dans cette bâtisse. Pour conserver leurs aliments, elles utilisaient une glacière souterraine alimentée par les blocs de glace de la Mortagne !",
+                        texte: "Énigme : Selon le panneau historique, combien de religieuses appartenaient initialement à cette communauté à son ouverture en 1922 ? Notez ce nombre pour l'indice [F].", 
+                        solution: "12" 
+                    },
+                    { 
+                        nom: "Étape 6 : L'Église Saint-Rémy", 
+                        lat: 48.386417, lng: 6.602944, 
+                        codeIndex: "G",
+                        dialogue: "Cette église possède de magnifiques cloches de 1863 qui pèsent respectivement 1000, 750 et 500 kg, accordées pour jouer une superbe harmonie en tierce majeure.",
+                        texte: "Énigme : Regardez le panneau d'information à l'entrée. Combien de statues remarquables en bois ou pierre l'église abrite-t-elle à l'intérieur de sa nef ? Entrez ce nombre pour l'indice [G].", 
+                        solution: "13" 
+                    },
+                    { 
+                        nom: "Étape 7 : L'Ancien Presbytère", 
+                        lat: 48.387222, lng: 6.604361, 
+                        codeIndex: "H",
+                        dialogue: "Cette noble demeure accueillait autrefois le curé du village. Son grand jardin clos de murs lui permettait de cultiver des plantes médicinales et potagères.",
+                        texte: "Énigme : Comptez le nombre de fenêtres alignées au premier étage sur la façade principale du bâtiment. Entrez ce chiffre pour votre dernier indice [H].", 
+                        solution: "5" 
+                    },
+                    { 
+                        nom: "Étape 8 : L'École d'Horticulture", 
+                        lat: 48.387139, lng: 6.605917, 
+                        codeIndex: "I",
+                        dialogue: "Nous y voilà ! Fondée à la fin du XIXe siècle, cette institution renommée forme les futurs experts du paysage, de l'horticulture et de l'environnement.",
+                        texte: "Énigme : Repérez le monument ou la plaque commémorative du fondateur de l'école. En quelle année cette grande école a-t-elle ouvert ses portes pour la toute première fois ? Calculez la somme des deux derniers chiffres de cette grande année. Entrez le résultat !", 
+                        solution: "14" 
+                    }
+                ]
+            }
+        };
+
+        let parcoursActuelId = 2;
+        let etapeActuelleIndex = 0;
+        let map = null;
+        let userMarker = null;
+        let targetMarker = null;
+        let watchId = null;
+        let reponsesJoueur = {};
+        let modeGuidageCacheFinale = false;
+
+        function changerEcran(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        window.onload = function() {
+            const p = dbParcours[2];
+            document.getElementById('detail-titre').innerText = p.titre;
+            document.getElementById('detail-badge').innerText = p.herisson;
+            document.getElementById('detail-lieu').innerText = p.lieu;
+            document.getElementById('detail-distance').innerText = p.distance;
+            document.getElementById('detail-duree').innerText = p.duree;
+        };
+
+        function demarrerJeu() {
+            etapeActuelleIndex = 0;
+            reponsesJoueur = {};
+            modeGuidageCacheFinale = false;
+            changerEcran('screen-carte');
+            initMap();
+        }
+
+        function initMap() {
+            const p = dbParcours[parcoursActuelId];
+            let cibleLat, cibleLng, cibleNom;
+
+            if (modeGuidageCacheFinale) {
+                cibleLat = p.cacheCoords.lat;
+                cibleLng = p.cacheCoords.lng;
+                cibleNom = p.cacheCoords.nom;
+                document.getElementById('carte-etape-nom').innerText = "📍 Objectif : La Cache Finale";
+                document.getElementById('carte-instruction-texte').innerText = "Rendez-vous au Verger Conservatoire. Suivez le marqueur sur le plan.";
+                document.getElementById('btn-action-carte').innerText = "JE SUIS À LA CACHE !";
+            } else {
+                const etape = p.etapes[etapeActuelleIndex];
+                cibleLat = etape.lat;
+                cibleLng = etape.lng;
+                cibleNom = etape.nom;
+                document.getElementById('carte-etape-nom').innerText = "Cible : " + etape.nom;
+                document.getElementById('carte-instruction-texte').innerText = "Suivez la carte. Votre position GPS s'affiche en bleu.";
+                document.getElementById('btn-action-carte').innerText = "J'Y SUIS !";
+            }
+
+            if (!map) {
+                map = L.map('map-container').setView([cibleLat, cibleLng], 16);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+            } else {
+                map.setView([cibleLat, cibleLng], 16);
+            }
+
+            if (targetMarker) { map.removeLayer(targetMarker); }
+            targetMarker = L.marker([cibleLat, cibleLng]).addTo(map).bindPopup("<b>" + cibleNom + "</b>").openPopup();
+
+            if (navigator.geolocation) {
+                if (watchId) navigator.geolocation.clearWatch(watchId);
+                watchId = navigator.geolocation.watchPosition(function(position) {
+                    const uLat = position.coords.latitude;
+                    const uLng = position.coords.longitude;
+                    const blueIcon = L.icon({
+                        iconUrl: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+                        iconSize: [32, 32],
+                        iconAnchor: [16, 32]
+                    });
+                    if (userMarker) { userMarker.setLatLng([uLat, uLng]); } 
+                    else { userMarker = L.marker([uLat, uLng], {icon: blueIcon}).addTo(map); }
+                }, null, { enableHighAccuracy: true });
+            }
+            setTimeout(() => { map.invalidateSize(); }, 200);
+        }
+
+        function gererClicActionCarte() {
+            if (modeGuidageCacheFinale) {
+                document.getElementById('zone-mot-mystere').style.display = 'none';
+                document.getElementById('input-mot-mystere').value = '';
+                document.getElementById('error-msg-cache').style.display = 'none';
+                changerEcran('screen-cache-recherche');
+            } else {
+                ouvrirEtapeAction();
+            }
+        }
+
+        function ouvrirEtapeAction() {
+            const p = dbParcours[parcoursActuelId];
+            const etape = p.etapes[etapeActuelleIndex];
+            
+            changerEcran('screen-enigme');
+            document.getElementById('jeu-etape-nom').innerText = etape.nom;
+            document.getElementById('jeu-dialogue-herisson').innerText = etape.dialogue;
+            document.getElementById('jeu-enigme-texte').innerHTML = etape.texte;
+            
+            document.getElementById('input-reponse').value = reponsesJoueur[etapeActuelleIndex] || "";
+        }
+
+        function enregistrerEtapeReponse() {
+            const val = document.getElementById('input-reponse').value.trim();
+            if(val === "") { alert("Veuillez inscrire un nombre pour valider l'étape."); return; }
+            
+            reponsesJoueur[etapeActuelleIndex] = val;
+            const p = dbParcours[parcoursActuelId];
+            etapeActuelleIndex++;
+
+            if (etapeActuelleIndex < p.etapes.length) {
+                changerEcran('screen-carte');
+                initMap();
+            } else {
+                genererEcranVerification();
+            }
+        }
+
+        function genererEcranVerification() {
+            const p = dbParcours[parcoursActuelId];
+            const conteneur = document.getElementById('liste-recap-indices');
+            conteneur.innerHTML = "";
+            let toutesLesReponsesJustes = true;
+
+            p.etapes.forEach((etape, idx) => {
+                const repJoueur = reponsesJoueur[idx] || "";
+                const estJuste = (repJoueur === etape.solution);
+                
+                if(!estJuste) { toutesLesReponsesJustes = false; }
+
+                const ligne = document.createElement('div');
+                ligne.className = "recap-item";
+                ligne.innerHTML = `
+                    <div>
+                        <strong>Indice [${etape.codeIndex}]</strong> (${etape.nom}) : 
+                        <span style="font-weight:bold; color:${estJuste ? 'var(--vert-succes)' : 'var(--rouge-erreur)'};">${repJoueur}</span>
+                    </div>
+                    <div>
+                        <span class="status-badge ${estJuste ? 'status-valid' : 'status-wrong'}">${estJuste ? 'JUSTE 🟢' : 'FAUX 🔴'}</span>
+                        <button class="btn-modife" onclick="corrigerEtapeSpecifique(${idx})">Modifier</button>
+                    </div>
+                `;
+                conteneur.appendChild(ligne);
+            });
+
+            if(toutesLesReponsesJustes) {
+                document.getElementById('msg-verif-erreur').style.display = "none";
+                document.getElementById('btn-acces-cache').disabled = false;
+                document.getElementById('btn-acces-cache').style.backgroundColor = "var(--vert-succes)";
+            } else {
+                document.getElementById('msg-verif-erreur').style.display = "block";
+                document.getElementById('btn-acces-cache').disabled = true;
+                document.getElementById('btn-acces-cache').style.backgroundColor = "#ccc";
+            }
+
+            changerEcran('screen-verification-globale');
+        }
+
+        function corrigerEtapeSpecifique(idx) {
+            etapeActuelleIndex = idx;
+            ouvrirEtapeAction();
+        }
+
+        function lancerGuidageCacheFinale() {
+            modeGuidageCacheFinale = true;
+            changerEcran('screen-carte');
+            initMap();
+        }
+
+        function validerMotMystere() {
+            const p = dbParcours[parcoursActuelId];
+            const motSaisi = document.getElementById('input-mot-mystere').value.trim().toLowerCase();
+
+            if (motSaisi === p.motMystereOfficiel.toLowerCase()) {
+                if (watchId) navigator.geolocation.clearWatch(watchId);
+                changerEcran('screen-fin');
+            } else {
+                document.getElementById('error-msg-cache').style.display = "block";
+            }
+        }
+
+        function abandonnerJeu() {
+            if (confirm("Voulez-vous abandonner le parcours ? Votre progression sera effacée.")) {
+                if (watchId) navigator.geolocation.clearWatch(watchId);
+                window.location.href = "index.html";
+            }
+        }
+    </script>
+</body>
+</html>
