@@ -53,8 +53,8 @@
         #map-container { width: 100%; height: 320px; border-radius: 8px; margin-top: 15px; border: 2px solid var(--gris-fond); z-index: 1; }
         .step-header { color: var(--vert-principal); font-size: 1.6rem; margin-bottom: 5px; text-transform: uppercase; }
         
-        input[type="text"], input[type="number"] { width: 100%; padding: 12px; border: 2px solid var(--gris-fond); border-radius: 6px; font-size: 1rem; outline: none; margin-top: 10px; font-family: inherit; }
-        input[type="text"]:focus, input[type="number"]:focus { border-color: var(--vert-principal); }
+        input[type="number"] { width: 100%; padding: 12px; border: 2px solid var(--gris-fond); border-radius: 6px; font-size: 1rem; outline: none; margin-top: 10px; font-family: inherit; }
+        input[type="number"]:focus { border-color: var(--vert-principal); }
         
         .error-msg { color: var(--rouge-erreur); font-size: 0.85rem; margin-top: 5px; display: none; font-weight: bold; }
 
@@ -100,7 +100,7 @@
             <p class="intro-texte">
                 <strong>Introduction :</strong><br>
                 Bonjour les Z'explorateurs ! C'est moi, l'Héri'pousse ! 🌱 Bienvenue à Roville-aux-Chênes, un magnifique village rural où la pierre et le monde végétal racontent une histoire passionnante. <br><br>
-                Ensemble, nous allons parcourir les rues pour observer les détails cachés de nos fermes d'autrefois, écouter le murmure de l'eau près des anciens moulins et contempler des arbres centenaires. Ouvrez grand les yeux à chaque panneau patrimonial : un indice chiffré s'y cache à chaque fois. Récoltez-les tous pour débloquer le chemin secret vers notre grand verger final ! En route !
+                Ensemble, nous allons parcourir les rues pour observer les détails cachés de nos fermes d'autrefois, écouter le murmure de l'eau près des anciens moulins et contempler des arbres centenaires. Ouvrez grand les yeux à chaque panneau patrimonial : un indice exclusivement chiffré s'y cache à chaque fois. Récoltez-les tous pour débloquer le chemin secret vers notre grand verger final ! En route !
             </p>
 
             <button class="btn-principal" onclick="demarrerJeu()">DÉMARRER LE PARCOURS</button>
@@ -173,7 +173,7 @@
 
             <div id="zone-mot-mystere" style="display: none; margin-top: 25px; border-top: 2px dashed var(--gris-fond); padding-top: 15px;">
                 <label style="font-weight: bold; display: block; margin-bottom: 5px;">Entrez le mot mystère écrit à l'intérieur de la boîte :</label>
-                <input type="text" id="input-mot-mystere" placeholder="Tapez le mot ici..." autocomplete="off">
+                <input type="text" id="input-mot-mystere" style="width: 100%; padding: 12px; border: 2px solid var(--gris-fond); border-radius: 6px;" placeholder="Tapez le mot ici..." autocomplete="off">
                 <div id="error-msg-cache" class="error-msg">Ce n'est pas le bon mot mystère. Vérifie bien l'étiquette collée dans la boîte !</div>
                 <button class="btn-principal" onclick="validerMotMystere()">OUVRIR LE COFFRE NUMÉRIQUE</button>
             </div>
@@ -186,7 +186,7 @@
             </div>
             <p class="intro-texte" style="text-align: center; font-size: 1.1rem; line-height: 1.6;">
                 Nom d'un bourgeon, c'est gagné ! Le mot mystère est tout à fait exact ! Tu as surmonté tous les défis de Roville-aux-Chênes avec brio et tu as officiellement validé ton badge virtuel de l'<strong>Héri'pousse</strong> ! <br><br>
-                Un immense merci d'avoir partagé cette aventure botanique et patrimoniale à nos côtés. Prends soin de la nature et à bientôt pour une nouvelle quête avec les Zérissons !
+                Un immense merci d'avoir partagé cette aventure britannique et patrimoniale à nos côtés. Prends soin de la nature et à bientôt pour une nouvelle quête avec les Zérissons !
             </p>
             
             <button class="btn-principal" onclick="window.location.href='index.html'">RETOUR À L'ACCUEIL GÉNÉRAL</button>
@@ -210,72 +210,80 @@
                         lat: 48.384444, lng: 6.604500, 
                         codeIndex: "A",
                         dialogue: "Regardez cette croix réalisée en grès montée sur un socle ! Elle témoigne de l'importance des pratiques religieuses rurales au XIXe siècle. Détruite lors de la terrible tempête de 1999, elle a été superbement restaurée en 2022. Elle comporte un Christ côté face et une vierge drapée au dos.",
-                        texte: "Énigme : Examinez le panneau ou le monument. Face au calvaire, cherchez le médaillon gravé qui indique l'année d'origine de cette croix. Quel est cette année ? Entrez la date complète pour valider l'indice [A].", 
+                        texte: "Énigme : Examinez le panneau ou le monument. Face au calvaire, cherchez le médaillon gravé qui indique l'année d'origine de cette croix. Quel est cette année historique ? Entrez la date complète pour valider l'indice [A].", 
                         solution: "1813" 
                     },
                     { 
                         nom: "Étape 1 : Le Vieux Chêne", 
                         lat: 48.385000, lng: 6.603806, 
                         codeIndex: "B",
-                        dialogue: "Par mes piquants, admirez ce colosse pédonculé ! Classé arbre remarquable, il est le seul témoin d'une époque lointaine ayant connu guerres et révolutions. Malgré une longue fissure sur son tronc causée par les intempéries et le réchauffement climatique, ce vieillard reste bien vigoureux !",
-                        texte: "Énigme : Lisez le descriptif de ce géant de la forêt. Quelle est la circonférence impressionnante (en mètres, avec la virgule, ex: 7.60) de ce tronc majestueux ? Entrez la valeur exacte pour l'indice [B].", 
-                        solution: "7.60" 
+                        dialogue: "Par mes piquants, admirez ce colosse pédonculé ! Classé arbre remarquable, il aurait entre 400 et 500 ans. Il reste le seul témoin d'une époque lointaine ayant connu guerres et révolutions. Malgré une longue fissure sur son tronc causée par les intempéries et le réchauffement climatique, ce vieillard fait la fierté du village !",
+                        texte: "Énigme : Ce géant possède une circonférence colossale de 7,60 mètres. Mais suite à un élagage récent, à combien de mètres se situe sa hauteur à l'heure actuelle ? Entrez ce nombre entier pour l'indice [B].", 
+                        solution: "20" 
                     },
                     { 
                         nom: "Étape 2 : Le Mur en Pierre Sèche", 
                         lat: 48.384000, lng: 6.603111, 
                         codeIndex: "C",
-                        dialogue: "Ce muret traditionnel est un véritable chef-d'œuvre de patience ! Il est entièrement réalisé par l'appareillage minutieux de moellons de pierre, sans utiliser le moindre mortier ou liant. Tout repose uniquement sur la gravité et l'agencement précis des pierres.",
-                        texte: "Énigme : D'après les explications patrimoniales du mur, sur quelle force naturelle repose uniquement la tenue et la stabilité de cette technique de construction ancestrale ? Entrez le mot en minuscules (sans espace ni accent) pour l'indice [C].", 
-                        solution: "gravite" 
+                        dialogue: "Ce muret traditionnel est un véritable chef-d'œuvre de patience ! Il est entièrement réalisé par l'appareillage minutieux de moellons de pierre, offrant également aujourd’hui des habitats variés et des microclimats propices à de nombreuses espèces animales et végétales.",
+                        texte: "Énigme : Lisez la fiche explicative. Cette technique ancestrale repose uniquement sur la gravité et l'agencement précis des pierres. Combien de liants ou de mortiers ont été utilisés pour faire tenir cette structure ? Entrez le nombre exact pour l'indice [C].", 
+                        solution: "0" 
                     },
                     { 
                         nom: "Étape 3 : Ancien Moulin et Lavoir", 
                         lat: 48.383417, lng: 6.600111, 
                         codeIndex: "D",
-                        dialogue: "Avant l'arrivée de l'eau courante en 1953, faire la lessive était un travail titanesque ! Les femmes faisaient bouillir le linge chez elles dans des lessiveuses avant de le transporter en brouette jusqu'ici. Ce lavoir de 35 mètres de long installé sur le canal possède deux plates-formes : l'une pour les basses-eaux et l'autre surélevée pour les hautes-eaux.",
-                        texte: "Énigme : Lisez le panneau informatif historique du lavoir. En quelle année précise des travaux ont-ils été menés pour couvrir l'ensemble du lavoir d'une toiture avec une charpente en chêne ? Notez cette année pour l'indice [D].", 
-                        solution: "1836" 
+                        dialogue: "Avant l'arrivée de l'eau courante, faire la lessive était un travail titanesque ! Les femmes faisaient bouillir le linge chez elles avant de venir ici. Installé le long du canal d'alimentation du moulin, ce lavoir possède deux plates-formes de lavage se terminant par un muret dallé de pierres de grès.",
+                        texte: "Énigme : Lisez les dimensions architecturales sur la fiche. Quelle est la longueur totale (en mètres) de ce magnifique lavoir protégé des vents par un grand mur en pierre percés de portes ? Entrez ce nombre pour l'indice [D].", 
+                        solution: "35" 
                     },
                     { 
-                        nom: "Étape 4 : Les Fermes Vosgiennes", 
+                        nom: "Étape 4 : L'Ancien Moulin", 
                         lat: 48.385000, lng: 6.601583, 
                         codeIndex: "E",
-                        dialogue: "Regardez ces magnifiques fermes traditionnelles ! La maison Lorraine est passionnante : elle regroupe sous un même toit le logis, la grange (pour stocker les récoltes et faire le battage) et l'étable. Devant, l'espace libre en retrait de la rue s'appelle l'usoir. Il servait à stocker le bois, les charrettes et le tas de fumier !",
-                        texte: "Énigme : Lisez les caractéristiques architecturales de ces habitations lorraines mitoyennes. Comment appelle-t-on cet espace libre situé entre la chaussée et la façade de la ferme ? Écrivez ce nom en minuscules pour l'indice [E].", 
-                        solution: "usoir" 
+                        dialogue: "Attesté dès la fin du XVIIIe siècle, ce moulin appartenait à la Seigneurie de Roville. Reconstruit en 1844, puis victime d'un incendie en 1914, le site a connu une période très prospère pendant l'entre-deux-guerres en produisant de la farine à partir de blé local pour alimenter les boulangeries des Vosges et de Meurthe-et-Moselle.",
+                        texte: "Énigme : Regardez les volumes de production de la minoterie. Combien de quintaux de farine le moulin produisait-il en moyenne chaque année pendant sa période de prospérité ? Notez ce grand nombre pour l'indice [E].", 
+                        solution: "20000" 
                     },
                     { 
-                        nom: "Étape 5 : L'Ancien Couvent", 
+                        nom: "Étape 5 : Les Fermes Vosgiennes", 
                         lat: 48.385778, lng: 6.602722, 
                         codeIndex: "F",
-                        dialogue: "De 1922 à 1936, une communauté de religieuses bénédictines de Saint-Eustase vivait cloîtrée ici. Elles brodaient des ornements d'église et utilisaient une glacière creusée dans le parc, alimentée par des blocs de glace tirés de la Mortagne gelée en hiver !",
-                        texte: "Énigme : Cherchez la date de départ des sœurs. En quelle année la communauté a-t-elle dû quitter Roville pour s'installer dans les Landes, faute d'aumôniers pour célébrer les messes ? Notez cette année pour l'indice [F].", 
-                        solution: "1936" 
+                        dialogue: "Regardez ces magnifiques fermes traditionnelles ! La maison Lorraine regroupe sous un même toit le logis, la grange (reconnaissable à sa grande porte surmontée d'une arche en plein cintre) et l'étable. Devant, l'espace libre en retrait de la rue s'appelle l'usoir, dont l'importance du volume du tas de fumier était un signe extérieur de richesse.",
+                        texte: "Énigme : Observez bien le livret ou le panneau face à vous. Quel est le numéro imprimé en gros tout en haut à gauche (le numéro de la fiche patrimoine) consacré aux fermes vosgiennes ? Entrez ce chiffre pour l'indice [F].", 
+                        solution: "9" 
                     },
                     { 
-                        nom: "Étape 6 : L'Église Saint-Rémy", 
+                        nom: "Étape 6 : L'Ancien Couvent", 
                         lat: 48.386417, lng: 6.602944, 
                         codeIndex: "G",
-                        dialogue: "Entièrement reconstruite et agrandie à partir de 1840, cette église possède de superbes richesses : deux autels latéraux en bois sculpté, un autel central en marbre et des boiseries ornées d'anges et de grappes de raisins. Ses vitraux de 1888 illustrent la vie religieuse, le miracle de Saint-Nicolas, la Cene et le baptême de Clovis.",
-                        texte: "Énigme : Lisez l'inventaire historique de l'église. Combien de statues au total le bâtiment abrite-t-il, parmi lesquelles figure celle du patron de la paroisse, Saint-Rémy ? Entrez ce nombre précis pour l'indice [G].", 
-                        solution: "13" 
+                        dialogue: "De 1922 à 1936, une communauté de religieuses bénédictines de Saint-Eustase vivait cloîtrée ici. Elles brodaient des ornements d'église et disposaient d'une glacière creusée dans le parc, un ancêtre du réfrigérateur approvisionné en blocs de glace tirés de la Mortagne gelée en hiver !",
+                        texte: "Énigme : Un petit saut en arrière sur la fiche du Lavoir (étape 3). Le mur en pierre qui protège le lavoir des vents est percé d'un certain nombre de portes. Combien y en a-t-il au total ? Entrez ce chiffre pour l'indice [G].", 
+                        solution: "5" 
                     },
                     { 
-                        nom: "Étape 7 : L'Ancien Presbytère", 
+                        nom: "Étape 7 : L'Église Saint-Rémy", 
                         lat: 48.387222, lng: 6.604361, 
                         codeIndex: "H",
-                        dialogue: "Ce presbytère a connu de grands bouleversements ! Vendu à la Révolution française, il est entièrement reconstruit en grès rose en 1832 selon les plans de l'architecte Gahon d'Épinal, à l'exception de sa grande écurie. Les pierres de taille viennent de Rambervillers !",
-                        texte: "Énigme : Observez la provenance des matériaux sur la fiche historique. De quelle commune limitrophe proviennent les moellons et les pavés utilisés pour la maçonnerie du presbytère ? Écrivez le nom de cette commune avec des tirets (ex: saint-dié) en minuscules pour l'indice [H].", 
-                        solution: "saint-maurice-sur-mortagne" 
+                        dialogue: "Entièrement reconstruite et agrandie à partir de 1840, cette église possède de magnifiques cloches fondues en 1863. Elles jouent une harmonie parfaite en tierce majeure. La nef abrite également un superbe ensemble de treize statues, dont celle de Saint-Rémy.",
+                        texte: "Énigme : Lisez les détails de la fiche sur le carillon. Les trois cloches de l'église pèsent respectivement 1000 kg, 750 kg et un troisième poids plus léger. Quel est le poids en kilogrammes de cette troisième cloche ? Notez-le pour l'indice [H].", 
+                        solution: "500" 
                     },
                     { 
-                        nom: "Étape 8 : L'École de Roville", 
+                        nom: "Étape 8 : L'Ancien Presbytère", 
                         lat: 48.387139, lng: 6.605917, 
                         codeIndex: "I",
-                        dialogue: "Quelle fierté ! Née en 1942 au sein de l'ancien couvent pour former les jeunes aux métiers de la terre, l'école d'horticulture s'est illustrée dès 1943 en délivrant des bulletins d'inscription qui dispensaient les élèves du Service du Travail Obligatoire (STO) en Allemagne ! Aujourd'hui, son savoir-faire rayonne partout.",
-                        texte: "Énigme : Lisez l'histoire de la fondation de l'école. En quelle année précise l'École d'horticulture est-elle officiellement née en réponse au mouvement de restauration paysanne ? Entrez cette année pour valider votre dernier indice [I].", 
-                        solution: "1942" 
+                        dialogue: "Ce presbytère a connu de grands bouleversements ! Vendu à la Révolution française, il a subi de multiples remaniements au début du XIXe siècle. Il a été entièrement reconstruit en grès rose à l'exception de la grande écurie, selon les plans de l'architecte Gahon d'Épinal.",
+                        texte: "Énigme : Repérez la date des grands travaux de reconstruction. En quelle année précise du XIXe siècle ce presbytère a-t-il subi son remaniement le plus important ? Entrez cette année pour l'indice [I].", 
+                        solution: "1832" 
+                    },
+                    { 
+                        nom: "Étape 9 : L'École de Roville", 
+                        lat: 48.387300, lng: 6.606200, 
+                        codeIndex: "J",
+                        dialogue: "Quelle fierté ! Née en 1942 au sein de l'ancien couvent désaffecté pour former les jeunes aux métiers de la terre, l'école d'horticulture s'est distinguée dès 1943 en délivrant des bulletins d'inscription qui dispensaient les élèves du Service du Travail Obligatoire (STO) en Allemagne ! Aujourd'hui, son savoir-faire rayonne partout.",
+                        texte: "Énigme : Faisons un lien avec la fiche de l'Église Saint-Rémy (étape 7). Combien d'autels latéraux en bois sculpté composent le mobilier intérieur de cette église ? Entrez ce chiffre pour valider votre tout dernier indice [J].", 
+                        solution: "2" 
                     }
                 ]
             }
@@ -372,6 +380,8 @@
             }
         }
 
+        function abrirEtapeAction() { abrirEtapeAction(); } /* Alias de compatibilité interne */
+
         function ouvrirEtapeAction() {
             const p = dbParcours[parcoursActuelId];
             const etape = p.etapes[etapeActuelleIndex];
@@ -380,29 +390,12 @@
             document.getElementById('jeu-etape-nom').innerText = etape.nom;
             document.getElementById('jeu-dialogue-herisson').innerText = etape.dialogue;
             document.getElementById('jeu-enigme-texte').innerHTML = etape.texte;
-            
-            // Gestion du type d'input selon si la solution attend un texte ou un chiffre
-            const inputZone = document.querySelector('.zone-reponse');
-            if (isNaN(etape.solution)) {
-                inputZone.innerHTML = `
-                    <label style="font-weight: bold;">Entrez votre réponse en toutes lettres (minuscules) :</label>
-                    <input type="text" id="input-reponse" placeholder="Votre réponse ici..." autocomplete="off">
-                    <button class="btn-principal" onclick="enregistrerEtapeReponse()">VALIDER CETTE ÉTAPE</button>
-                `;
-            } else {
-                inputZone.innerHTML = `
-                    <label style="font-weight: bold;">Entrez le nombre ou chiffre trouvé :</label>
-                    <input type="text" id="input-reponse" placeholder="Ex: 12 ou 7.60" autocomplete="off">
-                    <button class="btn-principal" onclick="enregistrerEtapeReponse()">VALIDER CETTE ÉTAPE</button>
-                `;
-            }
-            
             document.getElementById('input-reponse').value = reponsesJoueur[etapeActuelleIndex] || "";
         }
 
         function enregistrerEtapeReponse() {
-            const val = document.getElementById('input-reponse').value.trim().toLowerCase();
-            if(val === "") { alert("Veuillez inscrire une réponse pour valider l'étape."); return; }
+            const val = document.getElementById('input-reponse').value.trim();
+            if(val === "") { alert("Veuillez inscrire une réponse chiffrée pour valider l'étape."); return; }
             
             reponsesJoueur[etapeActuelleIndex] = val;
             const p = dbParcours[parcoursActuelId];
@@ -424,7 +417,7 @@
 
             p.etapes.forEach((etape, idx) => {
                 const repJoueur = reponsesJoueur[idx] || "";
-                const estJuste = (repJoueur === etape.solution.toLowerCase());
+                const estJuste = (repJoueur === etape.solution);
                 
                 if(!estJuste) { toutesLesReponsesJustes = false; }
 
