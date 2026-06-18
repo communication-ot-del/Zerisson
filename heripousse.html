@@ -100,7 +100,7 @@
             <p class="intro-texte">
                 <strong>Introduction :</strong><br>
                 Bonjour les Z'explorateurs ! C'est moi, l'Héri'pousse ! 🌱 Bienvenue à Roville-aux-Chênes, un magnifique village rural où la pierre et le monde végétal racontent une histoire passionnante. <br><br>
-                Ensemble, nous allons parcourir les rues pour observer les détails cachés de nos fermes d'autrefois, écouter le murmure de l'eau près des anciens moulins et contempler des arbres centenaires. Ouvrez grand les yeux à chaque panneau patrimonial : un indice exclusivement chiffré s'y cache à chaque fois. Récoltez-les tous pour débloquer le chemin secret vers notre grand verger final ! En route !
+                Ensemble, nous allons parcourir les rues pour observer les détails cachés de nos fermes d'autrefois, écouter le murmure de l'eau près des anciens moulins et contempler des arbres centenaires. Ouvrez grand les yeux à chaque panneau patrimonial : un indice exclusivement chiffré s'y cache à chaque fois. Récoltez-les tous avec succès pour débloquer le chemin mystère vers notre refuge final ! En route !
             </p>
 
             <button class="btn-principal" onclick="demarrerJeu()">DÉMARRER LE PARCOURS</button>
@@ -156,7 +156,7 @@
         </div>
 
         <div id="screen-cache-recherche" class="screen">
-            <div class="step-header" style="color: #e67e22;">📍 La Cache : Le Verger Conservatoire</div>
+            <div class="step-header" style="color: #e67e22;">📍 La Cache Finale</div>
             
             <div class="dialogue-wrapper">
                 <img src="Héri'pousse.png" class="avatar-herisson" alt="Héri'pousse" onerror="this.src='https://placehold.co/100?text=🦔'">
@@ -249,17 +249,17 @@
                         nom: "Étape 5 : Les Fermes Vosgiennes", 
                         lat: 48.385778, lng: 6.602722, 
                         codeIndex: "F",
-                        dialogue: "Regardez ces magnifiques fermes traditionnelles ! La maison Lorraine regroupe sous un même toit le logis, la grange (reconnaissable à sa grande porte surmontée d'une arche en plein cintre) et l'étable. Devant, l'espace libre en retrait de la rue s'appelle l'usoir, dont l'importance du volume du tas de fumier était un signe extérieur de richesse.",
-                        texte: "Énigme : Observez bien le livret ou le panneau face à vous. Quel est le numéro imprimé en gros tout en haut à gauche (le numéro de la fiche patrimoine) consacré aux fermes vosgiennes ? Entrez ce chiffre pour l'indice [F].", 
-                        solution: "9" 
+                        dialogue: "Regardez ces magnifiques fermes traditionnelles ! La maison Lorraine regroupe astucieusement sous un même toit toutes les fonctions de la vie agricole d'autrefois, réparties en plusieurs travées spécifiques (le logis, la grange, et l'étable/écurie).",
+                        texte: "Énigme : Lisez attentivement la description de la structure de ces fermes traditionnelles. Combien de fonctions spécifiques de la vie agricole de l'époque (travées) sont ainsi regroupées en tout sous un seul et même toit ? Écrivez ce nombre pour l'indice [F].", 
+                        solution: "3" 
                     },
                     { 
                         nom: "Étape 6 : L'Ancien Couvent", 
                         lat: 48.386417, lng: 6.602944, 
                         codeIndex: "G",
-                        dialogue: "De 1922 à 1936, une communauté de religieuses bénédictines de Saint-Eustase vivait cloîtrée ici. Elles brodaient des ornements d'église et disposaient d'une glacière creusée dans le parc, un ancêtre du réfrigérateur approvisionné en blocs de glace tirés de la Mortagne gelée en hiver !",
-                        texte: "Énigme : Un petit saut en arrière sur la fiche du Lavoir (étape 3). Le mur en pierre qui protège le lavoir des vents est percé d'un certain nombre de portes. Combien y en a-t-il au total ? Entrez ce chiffre pour l'indice [G].", 
-                        solution: "5" 
+                        dialogue: "Une communauté de religieuses bénédictines de Saint-Eustase s'installe dans cette demeure qui devient un couvent. Elles y restaient cloîtrées toute leur vie et brodaient des ornements. Elles disposaient d'une étonnante glacière alimentée en hiver avec de la glace de la Mortagne !",
+                        texte: "Énigme : D'après l'historique inscrit sur le panneau de l'Ancien Couvent, en quelle année précise du XXe siècle les religieuses ont-elles définitivement quitté Roville pour s'installer dans les Landes, faute d'aumôniers pour les messes ? Notez cette année pour l'indice [G].", 
+                        solution: "1936" 
                     },
                     { 
                         nom: "Étape 7 : L'Église Saint-Rémy", 
@@ -281,9 +281,9 @@
                         nom: "Étape 9 : L'École de Roville", 
                         lat: 48.387300, lng: 6.606200, 
                         codeIndex: "J",
-                        dialogue: "Quelle fierté ! Née en 1942 au sein de l'ancien couvent désaffecté pour former les jeunes aux métiers de la terre, l'école d'horticulture s'est distinguée dès 1943 en délivrant des bulletins d'inscription qui dispensaient les élèves du Service du Travail Obligatoire (STO) en Allemagne ! Aujourd'hui, son savoir-faire rayonne partout.",
-                        texte: "Énigme : Faisons un lien avec la fiche de l'Église Saint-Rémy (étape 7). Combien d'autels latéraux en bois sculpté composent le mobilier intérieur de cette église ? Entrez ce chiffre pour valider votre tout dernier indice [J].", 
-                        solution: "2" 
+                        dialogue: "Quelle fierté ! Née en 1942 au sein de l'ancien couvent désaffecté pour former les jeunes aux métiers de la terre, l'école d'horticulture s'est rapidement agrandie pour devenir un pôle réputé transmettant un solide savoir-faire et savoir-être à travers les générations.",
+                        texte: "Énigme : Lisez la chronique historique locale de l'établissement. En quelle année précise l'école s'est-elle distinguée pour la première fois en délivrant des bulletins d'inscription dispensant les jeunes du Service du Travail Obligatoire (STO) en Allemagne ? Saisissez cette année pour clore l'indice [J].", 
+                        solution: "1943" 
                     }
                 ]
             }
@@ -330,7 +330,7 @@
                 cibleLng = p.cacheCoords.lng;
                 cibleNom = p.cacheCoords.nom;
                 document.getElementById('carte-etape-nom').innerText = "📍 Objectif : La Cache Finale";
-                document.getElementById('carte-instruction-texte').innerText = "Rendez-vous au Verger Conservatoire. Suivez le marqueur vert sur le plan.";
+                document.getElementById('carte-instruction-texte').innerText = "Suivez le marqueur vert sur le plan pour rejoindre la cache.";
                 document.getElementById('btn-action-carte').innerText = "JE SUIS ARRIVÉ !";
             } else {
                 const etape = p.etapes[etapeActuelleIndex];
@@ -380,7 +380,7 @@
             }
         }
 
-        function abrirEtapeAction() { abrirEtapeAction(); } /* Alias de compatibilité interne */
+        function abrirEtapeAction() { abrirEtapeAction(); }
 
         function ouvrirEtapeAction() {
             const p = dbParcours[parcoursActuelId];
