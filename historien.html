@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Les Zérissons - L'Héristorien</title>
+    <title>Les Zérissons - L'Héri'storien</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -13,10 +13,10 @@
 
     <style>
         :root {
-            --bleu-principal: #34495e;
-            --fonce-texte: #2c3e50;
-            --fonce-titre: #7f8c8d;
-            --gris-fond: #e2e8f0;
+            --vert-principal: #90A265;
+            --fonce-texte: #666A5F;
+            --fonce-titre: #6D6E71;
+            --gris-fond: #E6E7E8;
             --blanc: #FFFFFF;
             --rouge-erreur: #c0392b;
             --vert-succes: #27ae60;
@@ -26,10 +26,10 @@
         body { font-family: 'Poppins', sans-serif; background-color: var(--gris-fond); color: var(--fonce-texte); padding-bottom: 30px; }
         h1, h2, h3 { font-family: 'Yanone Kaffeesatz', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        header { background-color: var(--blanc); padding: 15px; border-bottom: 3px solid var(--bleu-principal); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        header { background-color: var(--blanc); padding: 15px; border-bottom: 3px solid var(--vert-principal); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .header-container { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; text-align: center; }
         .mascotte-ronde { width: 90px; height: 90px; object-fit: contain; margin-bottom: 5px; }
-        .app-titre { font-size: 2.2rem; color: var(--bleu-principal); font-weight: 700; line-height: 1; }
+        .app-titre { font-size: 2.2rem; color: var(--vert-principal); font-weight: 700; line-height: 1; }
         
         .baseline-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
         .sub-baseline { font-size: 0.85rem; color: var(--fonce-titre); font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
@@ -42,19 +42,19 @@
         .badge-herisson { display: inline-block; background-color: var(--gris-fond); color: var(--fonce-texte); padding: 4px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-bottom: 12px; }
         
         .infos-cles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; font-size: 0.85rem; background-color: #f8f9f9; padding: 10px; border-radius: 8px; }
-        .infos-cles span { display: block; font-weight: bold; color: var(--bleu-principal); }
+        .infos-cles span { display: block; font-weight: bold; color: var(--vert-principal); }
         
         .btn-retour { background: none; border: none; color: var(--fonce-titre); font-weight: bold; cursor: pointer; margin-bottom: 15px; display: flex; align-items: center; gap: 5px; font-size: 0.9rem; }
         .intro-texte { margin: 15px 0; line-height: 1.6; font-size: 0.95rem; }
         
-        .btn-principal { display: block; width: 100%; background-color: var(--bleu-principal); color: var(--blanc); border: none; padding: 15px; border-radius: 8px; font-family: 'Yanone Kaffeesatz', sans-serif; font-size: 1.5rem; font-weight: bold; cursor: pointer; text-align: center; margin-top: 20px; box-shadow: 0 4px 6px rgba(52, 73, 94, 0.3); text-transform: uppercase; }
+        .btn-principal { display: block; width: 100%; background-color: var(--vert-principal); color: var(--blanc); border: none; padding: 15px; border-radius: 8px; font-family: 'Yanone Kaffeesatz', sans-serif; font-size: 1.5rem; font-weight: bold; cursor: pointer; text-align: center; margin-top: 20px; box-shadow: 0 4px 6px rgba(144, 162, 101, 0.3); text-transform: uppercase; }
         .btn-principal:disabled { background-color: #ccc; box-shadow: none; cursor: not-allowed; }
 
         #map-container { width: 100%; height: 320px; border-radius: 8px; margin-top: 15px; border: 2px solid var(--gris-fond); z-index: 1; }
-        .step-header { color: var(--bleu-principal); font-size: 1.6rem; margin-bottom: 5px; text-transform: uppercase; }
+        .step-header { color: var(--vert-principal); font-size: 1.6rem; margin-bottom: 5px; text-transform: uppercase; }
         
-        input[type="number"] { width: 100%; padding: 12px; border: 2px solid var(--gris-fond); border-radius: 6px; font-size: 1rem; outline: none; margin-top: 10px; font-family: inherit; }
-        input[type="number"]:focus { border-color: var(--bleu-principal); }
+        input[type="text"], input[type="number"] { width: 100%; padding: 12px; border: 2px solid var(--gris-fond); border-radius: 6px; font-size: 1rem; outline: none; margin-top: 10px; font-family: inherit; }
+        input[type="text"]:focus, input[type="number"]:focus { border-color: var(--vert-principal); }
         
         .error-msg { color: var(--rouge-erreur); font-size: 0.85rem; margin-top: 5px; display: none; font-weight: bold; }
 
@@ -63,7 +63,7 @@
         .bulle-dialogue { background-color: #f1f2f6; border-radius: 12px; padding: 12px 15px; font-size: 0.9rem; line-height: 1.5; position: relative; width: 100%; border: 1px solid #e4e7eb; }
 
         .coord-box { background: #f8f9f9; padding: 15px; border-radius: 8px; margin: 15px 0; border: 1px solid #e6e7e8; }
-        .coord-line { font-family: monospace; font-size: 1.02rem; font-weight: bold; text-align: center; margin-bottom: 15px; color: var(--fonce-titre); }
+        .coord-line { font-family: monospace; font-size: 1.05rem; font-weight: bold; text-align: center; margin-bottom: 15px; color: var(--fonce-titre); }
         .recap-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #e6e7e8; font-size: 0.85rem; }
         .status-badge { padding: 3px 8px; border-radius: 4px; color: white; font-size: 0.75rem; font-weight: bold; }
         .status-valid { background-color: var(--vert-succes); }
@@ -86,7 +86,6 @@
 
     <div class="container">
 
-        <!-- ================= ÉCRAN DE DÉTAIL DU PARCOURS ================= -->
         <div id="screen-detail" class="screen active">
             <button class="btn-retour" onclick="window.location.href='index.html'">← Retour à la liste</button>
             <h2 id="detail-titre"></h2>
@@ -100,14 +99,12 @@
 
             <p class="intro-texte">
                 <strong>Introduction :</strong><br>
-                Bonjour les Z'explorateurs ! C'est moi, l'Héristorien ! 🛡️ Bienvenue à Rambervillers, une cité historique aux secrets de pierre bien gardés. <br><br>
-                Ensemble, nous allons traverser les âges pour observer les vestiges des anciennes fortifications, contempler la majestueuse église et fouiller le passé héroïque de la ville. Ouvrez l'œil, chaque étape dissimule un indice purement chiffré. Résolvez-les tous avec succès pour débloquer l'accès à notre refuge final ! C'est parti !
+                Muni de vos bonnes chaussures, partez avec l'Héri'storien décoder le centre de Rambervillers. À chaque étape, observez bien les monuments et lisez attentivement les panneaux d'information pour en extraire un indice numérique indispensable pour débloquer la cache finale !
             </p>
 
             <button class="btn-principal" onclick="demarrerJeu()">DÉMARRER LE PARCOURS</button>
         </div>
 
-        <!-- ================= ÉCRAN : CARTE DE NAVIGATION GPS ================= -->
         <div id="screen-carte" class="screen">
             <button class="btn-retour" onclick="abandonnerJeu()">✕ Abandonner</button>
             <div class="step-header" id="carte-etape-nom">Direction</div>
@@ -118,12 +115,11 @@
             <button id="btn-action-carte" class="btn-principal" onclick="gererClicActionCarte()">J'Y SUIS !</button>
         </div>
 
-        <!-- ================= ÉCRAN : ÉNIGME DE L'ÉTAPE ================= -->
         <div id="screen-enigme" class="screen">
             <div class="step-header" id="jeu-etape-nom">Énigme</div>
             
             <div class="dialogue-wrapper">
-                <img src="Héristorien.png" class="avatar-herisson" alt="L'Héristorien" onerror="this.src='https://placehold.co/100?text=🦔'">
+                <img src="herisson_dialogue.png" class="avatar-herisson" alt="Héristorien" onerror="this.src='https://placehold.co/100?text=🦔'">
                 <div class="bulle-dialogue" id="jeu-dialogue-herisson"></div>
             </div>
 
@@ -136,88 +132,93 @@
             </div>
         </div>
 
-        <!-- ================= ÉCRAN : VÉRIFICATION GLOBALE ================= -->
         <div id="screen-verification-globale" class="screen">
             <div class="step-header" style="color: var(--fonce-titre);">🔐 Validation de vos indices</div>
             
             <div class="dialogue-wrapper">
-                <img src="Héristorien.png" class="avatar-herisson" alt="L'Héristorien" onerror="this.src='https://placehold.co/100?text=🦔'">
+                <img src="herisson_dialogue.png" class="avatar-herisson" alt="Héristorien" onerror="this.src='https://placehold.co/100?text=🦔'">
                 <div class="bulle-dialogue">
-                    « Par mon armure, quelle splendide récolte historique ! Tes indices vont nous dévoiler l'accès à la cache finale. Vérifions si tout est historiquement correct. Si un voyant reste rouge, clique sur "Modifier" pour retourner examiner le monument ! »
+                    « Voyons voir vos indices récoltés... Pour déverrouiller l'accès à ma cache secrète, toutes vos balises doivent passer au vert ! S'il y a du rouge, cliquez sur modifier pour corriger votre indice sur place. »
                 </div>
             </div>
 
             <div class="coord-box">
-                <div class="coord-line">Tableau de bord des indices récoltés</div>
+                <div class="coord-line">Coordonnées : N 48° [A][B].[C]0' / E 6° [D][E].[F][G]'</div>
                 <div id="liste-recap-indices"></div>
             </div>
 
             <div id="msg-verif-erreur" style="color: var(--rouge-erreur); font-weight: bold; text-align: center; display: none; margin-bottom: 10px; font-size: 0.9rem;">
-                ⚠️ Quelques erreurs se sont glissées dans vos rapports ! Corrigez les indices en rouge pour débloquer la suite.
+                ⚠️ Certaines réponses sont incorrectes. Corrigez-les pour débloquer le chemin !
             </div>
 
-            <button id="btn-acces-cache" class="btn-principal" onclick="lancerGuidageCacheFinale()">🔓 REJOINDRE LE REFUGE DE LA CACHE</button>
+            <button id="btn-acces-cache" class="btn-principal" onclick="lancerGuidageCacheFinale()">🔓 S'ORIENTER VERS LA CACHE FINALE</button>
         </div>
 
-        <!-- ================= ÉCRAN : FORMULAIRE DE LA CACHE FINALE ================= -->
         <div id="screen-cache-recherche" class="screen">
-            <div class="step-header" style="color: #e67e22;">📍 La Cache Finale</div>
+            <div class="step-header" style="color: #e67e22;">📍 La Cache : Chapelle Saint-Antoine</div>
             
             <div class="dialogue-wrapper">
-                <img src="Héristorien.png" class="avatar-herisson" alt="L'Héristorien" onerror="this.src='https://placehold.co/100?text=🦔'">
+                <img src="herisson_dialogue.png" class="avatar-herisson" alt="Héristorien" onerror="this.src='https://placehold.co/100?text=🦔'">
                 <div class="bulle-dialogue">
-                    « Félicitations ! Tu as bravé les épreuves temporelles de Rambervillers. La boîte finale se cache tout près dans cette zone historique. Explore les environs avec le plus grand respect du site pour dénicher le mot secret inscrit à l'intérieur ! »
+                    « Mille piques, vous avez réussi ! Vos calculs vous ont guidé sans encombre jusqu'à la magnifique Chapelle Saint-Antoine. Érigée au XVe siècle, elle abritait jadis des moines hospitaliers ! Regardez au-dessus de la porte, vous y verrez Saint-Antoine flanqué de sa clochette et de son petit cochon. Mais trêve de bavardages... Ouvrez l'œil, la cache physique se cache tout près ! »
                 </div>
             </div>
 
             <p class="intro-texte" style="font-weight: bold; margin-bottom: 15px; color: var(--fonce-titre); text-align: center; background: #fff5eb; padding: 10px; border-radius: 6px;">
-                Fouillez délicatement la zone finale. Trouvez la boîte physique et ouvrez-la pour y lire le mot mystère final !
+                Fouillez soigneusement les abords du monument. Une fois la boîte physique découverte, ouvrez-la : elle contient le mot mystère final !
             </p>
             
-            <button class="btn-principal" style="background-color: #e67e22;" onclick="document.getElementById('zone-mot-mystere').style.display='block'">🔓 J'AI LA BOÎTE EN MAIN !</button>
+            <button class="btn-principal" style="background-color: #e67e22;" onclick="document.getElementById('zone-mot-mystere').style.display='block'">🔓 J'AI TROUVÉ LA CACHE !</button>
 
             <div id="zone-mot-mystere" style="display: none; margin-top: 25px; border-top: 2px dashed var(--gris-fond); padding-top: 15px;">
-                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Entrez le mot mystère écrit à l'intérieur de la boîte :</label>
-                <input type="text" id="input-mot-mystere" style="width: 100%; padding: 12px; border: 2px solid var(--gris-fond); border-radius: 6px;" placeholder="Tapez le mot ici..." autocomplete="off">
-                <div id="error-msg-cache" class="error-msg">Ce n'est pas le bon mot mystère. Vérifie bien l'étiquette collée dans la boîte !</div>
+                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Entrez le mot mystère inscrit à l'intérieur de la boîte :</label>
+                <input type="text" id="input-mot-mystere" placeholder="Tapez le mot ici..." autocomplete="off">
+                <div id="error-msg-cache" class="error-msg">Ce n'est pas le bon mot mystère. Vérifiez bien l'étiquette dans la boîte !</div>
                 <button class="btn-principal" onclick="validerMotMystere()">OUVRIR LE COFFRE NUMÉRIQUE</button>
             </div>
         </div>
 
-        <!-- ================= ÉCRAN : FIN DE MISSION ================= -->
         <div id="screen-fin" class="screen">
-            <h2 style="color: var(--bleu-principal); text-align: center; margin-bottom: 15px;">🛡️ HISTOIRE SAUVEGARDÉE ! 🛡️</h2>
+            <h2 style="color: var(--vert-principal); text-align: center; margin-bottom: 15px;">🎉 PARCOURS COMPLÉTÉ ! 🎉</h2>
             <div style="text-align: center; margin-bottom: 20px;">
-                <img src="Héristorien.png" style="width: 120px; height: 120px; object-fit: contain;" alt="Félicitations">
+                <img src="herisson_dialogue.png" style="width: 120px; height: 120px; object-fit: contain;" alt="Félicitations">
             </div>
             <p class="intro-texte" style="text-align: center; font-size: 1.1rem; line-height: 1.6;">
-                Parfait ! Le code temporel est brisé. Tu as surmonté tous les défis de Rambervillers et tu as officiellement validé ton badge virtuel de l'<strong>Héristorien</strong> ! <br><br>
-                Un grand bravo pour ton sens de l'observation historique, et à bientôt pour une nouvelle quête avec les Zérissons !
+                Félicitations, super explorateur ! Le mot mystère est exact. Tu as résolu toutes les énigmes et validé ton badge virtuel de <strong>l'Héri'storien</strong> avec succès !<br><br>
+                Merci d'avoir joué et à bientôt pour de nouvelles aventures avec les Zérissons !
             </p>
             
-            <button class="btn-principal" onclick="window.location.href='index.html'">RETOUR À L'ACCUEIL GÉNÉRAL</button>
+            <button class="btn-principal" onclick="window.location.href='index.html'">RETOUR À L'ACCUEIL GENERAL</button>
         </div>
 
     </div>
 
     <script>
         const dbParcours = {
-            3: {
-                titre: "Rambervillers, la cité d'histoire",
-                herisson: "L'Héristorien (Histoire & Patrimoine)",
+            1: {
+                titre: "Rambervillers, raconte-nous ton histoire !",
+                herisson: "L'Héri'storien (Histoire & Patrimoine)",
                 lieu: "Rambervillers",
-                distance: "2.1 km",
-                duree: "1h30",
-                motMystereOfficiel: "rempart",
-                cacheCoords: { lat: 48.346111, lng: 6.634722, nom: "Cache finale historique" },
+                distance: "1.5 km",
+                duree: "1h00",
+                motMystereOfficiel: "laboureur",
+                cacheCoords: { lat: 48.344722, lng: 6.640528, nom: "Cache finale : Chapelle Saint-Antoine" },
                 etapes: [
                     { 
-                        nom: "Étape 1 : L'Église Saint-Libaire", 
+                        nom: "Départ : L'Hôtel de Ville", 
+                        lat: 48.346444, lng: 6.635333, 
+                        codeIndex: "A",
+                        dialogue: "Salut les Z'aventuriers ! C'est moi, l'Héri'storien. Rambervillers regorge d'histoires incroyables, et ça commence dès ce magnifique Hôtel de Ville en grès rose achevé en 1581. Regardez ses belles fenêtres à meneaux !",
+                        texte: "Énigme : Sur le côté droit de l'Hôtel de Ville, observez attentivement la plaque commémorative rendant hommage aux victimes civiles du bombardement allemand. Quel jour précis du mois d'octobre 1944 ce drame s'est-il produit ? Notez ce chiffre pour l'indice [A].", 
+                        solution: "3" 
+                    },
+                    { 
+                        nom: nom: "Étape 1 : L'Église Saint-Libaire", 
                         lat: 48.345833, lng: 6.633056, 
                         codeIndex: "A",
                         dialogue: "Admirez cet édifice gothique flamboyant construit en grès rose ! En levant les yeux vers les hauteurs de ses corniches et de ses toitures, vous apercevrez des sculptures de créatures fantastiques chargées d'évacuer les eaux de pluie : ce sont les fameuses gargouilles qui montent la garde tout autour de la structure.",
                         texte: "Énigme : Faites le tour extérieur complet de l'église et comptez précisément le nombre total de gargouilles sculptées qui jaillissent des murs pour protéger l'édifice. Combien y en a-t-il en tout ? Saisissez ce nombre pour l'indice [A].", 
-                        solution: "12" 
+                        solution: "12"
                     },
                     { 
                         nom: "Étape 2 : La Tour Carrée et l'Ancien Château", 
@@ -225,29 +226,45 @@
                         codeIndex: "B",
                         dialogue: "Vous vous trouvez ici devant les impressionnants vestiges des fortifications médiévales et de la Tour Carrée, témoins du système défensif de la cité. Ce bel espace a été aménagé en square en hommage à une figure industrielle clé de la ville.",
                         texte: "Énigme : Trouvez la plaque commémorative apposée directement sur la tour. Repérez l'année de naissance de l'industriel Maurice Velin qui a donné son nom à ce square. Additionnez maintenant les 4 chiffres de cette année entre eux. Quel résultat obtenez-vous pour l'indice [B] ?", 
-                        solution: "16" 
+                        solution: "16"
                     },
                     { 
-                        nom: "Étape 3 : La Tour Anglemein", 
-                        lat: 48.347500, lng: 6.634167, 
-                        codeIndex: "C",
-                        dialogue: "Cette tour d'angle est l'une des mieux conservées de l'ancienne enceinte fortifiée qui entourait Rambervillers. Regardez bien tout en haut, une structure métallique surmonte sa toiture pointue.",
-                        texte: "Énigme : Observez attentivement le sommet de la Tour Anglemein. Une grande lettre en métal y est fièrement visible. Quelle est la place de cette lettre dans l'alphabet (avec A=1, B=2, C=3, etc.) ? Entrez son équivalent chiffré pour l'indice [C].", 
+                        nom: "Étape 3 : La Tour Haton", 
+                        lat: 48.346250, lng: 6.633917, 
+                        codeIndex: "D",
+                        dialogue: "Voici l'un des plus précieux vestiges des fortifications de la cité construites au XIIIe siècle ! Un grand chantier de sauvetage a permis de sauvegarder de magnifiques fresques à l'intérieur.",
+                        texte: "Énigme : Lisez le panneau explicatif historique installé devant le monument. En quelle année le grand chantier de restauration moderne de la Tour Haton a-t-il débuté ? Prenez le tout dernier chiffre de cette année pour obtenir votre indice [D].", 
+                        solution: "3" 
+                    },
+                    { 
+                        nom: "Étape 4 : L'Ancien Couvent", 
+                        lat: 48.345583, lng: 6.633556, 
+                        codeIndex: "E",
+                        dialogue: "Face à la place Emile Drouël, s'étire la longue façade blanche de l'ancien couvent des Sœurs du Saint-Sacrement. Elles y ont tenu la toute première école gratuite de France pour les filles de familles pauvres !",
+                        texte: "Énigme : Repérez les indications historiques locales du couvent. Trouvez l'année exacte de sa fondation au XVIIe siècle. Faites l'addition de chacun des quatre chiffres composant cette année. Inscrivez le total pour votre indice [E].", 
                         solution: "18" 
                     },
                     { 
-                        nom: "Étape 4 : Le Pont des Laboureurs", 
+                        nom: "Étape 5 : La Tour Anglemein", 
+                        lat: 48.347500, lng: 6.634167, 
+                        codeIndex: "F",
+                        dialogue: "Cette tour d'angle est l'une des mieux conservées de l'ancienne enceinte fortifiée qui entourait Rambervillers. Regardez bien tout en haut, une structure métallique surmonte sa toiture pointue.",
+                        texte: "Énigme : Observez attentivement le sommet de la Tour Anglemein. Une grande lettre en métal y est fièrement visible. Quelle est la place de cette lettre dans l'alphabet (avec A=1, B=2, C=3, etc.) ? Entrez son équivalent chiffré pour l'indice [C].", 
+                        solution: "18"
+                    },
+                    { 
+                        nom: "Étape 6 : Le Pont des Laboureurs", 
                         lat: 48.344444, lng: 6.636111, 
-                        codeIndex: "D",
+                        codeIndex: "G",
                         dialogue: "Ce pont est un lieu hautement héroïque de l'histoire locale ! C'est ici même que les courageux gardes nationaux et citoyens rambuvetais ont vaillamment résisté face aux vagues successives et aux assauts massifs de l'armée prussienne pendant la guerre de 1870, ce qui vaudra plus tard à la ville la Légion d'honneur.",
                         texte: "Énigme : Quel jour précis du mois d'octobre 1870 s'est déroulé ce combat mémorable sur le pont où les Rambuvetais ont résisté aux assauts de l'armée prussienne ? Entrez le numéro du jour seul pour valider votre dernier indice [D].", 
-                        solution: "9" 
+                        solution: "9"
                     }
                 ]
             }
         };
 
-        let parcoursActuelId = 3;
+        let parcoursActuelId = 1;
         let etapeActuelleIndex = 0;
         let map = null;
         let userMarker = null;
@@ -262,8 +279,9 @@
             window.scrollTo(0,0);
         }
 
+        // Chargement automatique des détails
         window.onload = function() {
-            const p = dbParcours[3];
+            const p = dbParcours[1];
             document.getElementById('detail-titre').innerText = p.titre;
             document.getElementById('detail-badge').innerText = p.herisson;
             document.getElementById('detail-lieu').innerText = p.lieu;
@@ -288,15 +306,15 @@
                 cibleLng = p.cacheCoords.lng;
                 cibleNom = p.cacheCoords.nom;
                 document.getElementById('carte-etape-nom').innerText = "📍 Objectif : La Cache Finale";
-                document.getElementById('carte-instruction-texte').innerText = "Rejoignez la zone finale indiquée par le repère.";
-                document.getElementById('btn-action-carte').innerText = "JE SUIS ARRIVÉ !";
+                document.getElementById('carte-instruction-texte').innerText = "Suivez la boussole et la carte pour atteindre le monument secret caché dans Rambervillers.";
+                document.getElementById('btn-action-carte').innerText = "JE SUIS À LA CACHE !";
             } else {
                 const etape = p.etapes[etapeActuelleIndex];
                 cibleLat = etape.lat;
                 cibleLng = etape.lng;
                 cibleNom = etape.nom;
                 document.getElementById('carte-etape-nom').innerText = "Cible : " + etape.nom;
-                document.getElementById('carte-instruction-texte').innerText = "Suivez la carte, votre position GPS est en bleu.";
+                document.getElementById('carte-instruction-texte').innerText = "Suivez la carte. Votre position GPS s'actualise en bleu.";
                 document.getElementById('btn-action-carte').innerText = "J'Y SUIS !";
             }
 
@@ -346,12 +364,13 @@
             document.getElementById('jeu-etape-nom').innerText = etape.nom;
             document.getElementById('jeu-dialogue-herisson').innerText = etape.dialogue;
             document.getElementById('jeu-enigme-texte').innerHTML = etape.texte;
+            
             document.getElementById('input-reponse').value = reponsesJoueur[etapeActuelleIndex] || "";
         }
 
         function enregistrerEtapeReponse() {
             const val = document.getElementById('input-reponse').value.trim();
-            if(val === "") { alert("Veuillez inscrire une réponse chiffrée."); return; }
+            if(val === "") { alert("Veuillez inscrire un nombre pour passer à la suite."); return; }
             
             reponsesJoueur[etapeActuelleIndex] = val;
             const p = dbParcours[parcoursActuelId];
@@ -385,8 +404,8 @@
                         <span style="font-weight:bold; color:${estJuste ? 'var(--vert-succes)' : 'var(--rouge-erreur)'};">${repJoueur}</span>
                     </div>
                     <div>
-                        <span class="status-badge ${estJuste ? 'status-valid' : 'status-wrong'}">${estJuste ? 'VALIDE 🟢' : 'CORRECTIF 🔴'}</span>
-                        <button class="btn-modife" onclick="corrigerEtapeSpecifique(${idx})">Modifier</button>
+                        <span class="status-badge ${estJuste ? 'status-valid' : 'status-wrong'}">${estJuste ? 'JUSTE 🟢' : 'FAUX 🔴'}</span>
+                        <button class="btn-modife" onclick="corrigerEtapeSpecifique(${idx})">Corriger</button>
                     </div>
                 `;
                 conteneur.appendChild(ligne);
@@ -429,7 +448,7 @@
         }
 
         function abandonnerJeu() {
-            if (confirm("Voulez-vous abandonner le parcours ?")) {
+            if (confirm("Voulez-vous abandonner ? Votre progression actuelle sera perdue.")) {
                 if (watchId) navigator.geolocation.clearWatch(watchId);
                 window.location.href = "index.html";
             }
